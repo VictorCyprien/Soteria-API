@@ -104,3 +104,18 @@ class AbstractView(web.View):
             )
 
         return character_equipement
+    
+
+    def set_manifest_version(self, manifest_version: str):
+        with open('./manifest-data/version.txt', 'w') as file:
+            file.write(manifest_version)
+
+
+    def get_manifest_version(self) -> str:
+        data = ""
+        try:
+            with open('./manifest-data/version.txt', 'r') as file:
+                data = file.read()
+        except FileNotFoundError:
+            logger.warning("Manifest version not found, proceed...")
+        return data
