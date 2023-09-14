@@ -1,0 +1,4 @@
+[run]
+omit = 
+        *identity_server/main.py*
+        *identity_server/healthcheck.py*

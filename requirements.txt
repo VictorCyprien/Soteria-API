@@ -1,0 +1,8 @@
+apispec
+aiobungie
+aiohttp
+aiohttp_apispec
+colorlog
+gunicorn
+environs
+requests

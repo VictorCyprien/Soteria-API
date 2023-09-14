@@ -1,0 +1,6 @@
+pytest
+pytest-cov
+freezegun
+pylint
+requests-mock
+rich
