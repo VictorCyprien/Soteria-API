@@ -23,7 +23,7 @@ from .views import soteria_web
 app.add_routes(soteria_web)
 
 app.middlewares.append(validation_middleware)
-#app.middlewares.append(auth_middleware)
+app.middlewares.append(auth_middleware)
 
 ctx = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH, cafile="./certs/certificate.pem")
 ctx.load_cert_chain("./certs/certificate.pem", "./certs/key.pem")
