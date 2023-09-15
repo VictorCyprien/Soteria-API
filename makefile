@@ -30,7 +30,9 @@ cleaninstall: requirements clean_pip
 	@echo "---- Install packages from requirements.dev.txt ----"
 	@pip install -r requirements.dev.txt
 	@pip freeze
-	@echo
+	@echo "---- Install last aiobungie version ----"
+	@pip install -r requirements.aiobungie.txt
+	@pip freeze
 	@echo "---- Install packages from setup ----"
 	@$(shell echo ${PYTHON_ROCKSDB_FLAGS}) pip install -e ./
 
