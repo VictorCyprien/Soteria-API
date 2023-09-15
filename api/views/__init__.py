@@ -8,6 +8,8 @@ from .characters.one_character.one_character_view import OneCharacterView
 from .characters.equipement.characters_equipement_view import CharacterEquipementView
 from .manifest.manifest_view import ManifestView
 from .manifest.one_manifest.one_manifest_view import OneManifestView
+from .vendors.vendors_view import VendorsView
+from .vendors.one_vendor.one_vendor_view import OneVendorView
 
 __all__ = [
     "soteria_web", 
@@ -20,4 +22,6 @@ __all__ = [
     "CharacterEquipementView",
     "ManifestView",
     "OneManifestView",
+    "VendorsView",
+    "OneVendorView",
 ]
