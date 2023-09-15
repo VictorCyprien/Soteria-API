@@ -1,5 +1,5 @@
 apispec
-aiobungie
+pandas
 aiohttp
 aiohttp_apispec
 colorlog

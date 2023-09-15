@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 
 required = [
     "apispec",
-    "aiobungie",
     "aiohttp",
     "aiohttp_apispec",
     "colorlog",
     "gunicorn",
+    "pandas",
     "requests",
     "environs"
 ]
