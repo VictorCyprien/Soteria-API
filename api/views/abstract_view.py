@@ -134,10 +134,10 @@ class AbstractView(web.View):
 
     def get_data_of_one_entity(self, entity_id: int, manifest_data: Dict) -> Dict:
         entity = {}
-        entity["id"] = entity_id
+        entity["entity_id"] = entity_id
         entity_data = manifest_data.get(entity_id, None)
         entity_data = json.loads(entity_data) if entity_data is not None else None
-        entity["json"] = entity_data
+        entity["entity_data"] = entity_data
         return entity
 
 
