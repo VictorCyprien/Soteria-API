@@ -40,10 +40,6 @@ class RedirectView(AbstractView):
         
         async with self.bungie.client.acquire() as rest:
             tokens = await rest.fetch_oauth2_tokens(code)
-            self.bungie.client.metadata["token"] = tokens.access_token
-
-
-        # TODO : Return the token to client
 
         return json_response({
             "access_token": tokens.access_token
