@@ -3,6 +3,7 @@ from aiohttp import web
 from aiohttp.web_exceptions import HTTPNotFound
 import aiobungie
 import logging
+import json
 
 from ..client.bungie_api import BungieClient
 
@@ -119,6 +120,25 @@ class AbstractView(web.View):
         except FileNotFoundError:
             logger.warning("Manifest version not found, proceed...")
         return data
+    
+
+    def read_one_manifest_data(self, manifest_name: str):
+        try:
+            with open(f'./manifest-data/{manifest_name}.json', 'r') as file:
+                manifest_data: Dict = json.loads(file.read())
+        except FileNotFoundError:
+            raise HTTPNotFound(text="Manifest not found !")
+        
+        return manifest_data
+    
+
+    def get_data_of_one_entity(self, entity_id: int, manifest_data: Dict) -> Dict:
+        entity = {}
+        entity["id"] = entity_id
+        entity_data = manifest_data.get(entity_id, None)
+        entity_data = json.loads(entity_data) if entity_data is not None else None
+        entity["json"] = entity_data
+        return entity
 
 
     async def get_list_vendors(self, access_token: str, bungie_user_id: int) -> Dict:
