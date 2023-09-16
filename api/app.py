@@ -7,6 +7,7 @@ from aiohttp_apispec import (
     setup_aiohttp_apispec,
     validation_middleware
 )
+from aiohttp_swagger import setup_swagger
 
 from .helpers.check_auth import auth_middleware
 
@@ -34,5 +35,12 @@ setup_aiohttp_apispec(
     version="v1",
     url="/_schema/swagger.json",
     swagger_path="/_schema",
-    in_place=True
+    in_place=True,
 )
+
+async def swagger(app):
+    setup_swagger(
+        app=app, swagger_url='/api/docs', swagger_info=app['swagger_dict']
+    )
+
+app.on_startup.append(swagger)

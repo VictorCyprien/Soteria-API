@@ -6,6 +6,7 @@ import logging
 import json
 
 from ..client.bungie_api import BungieClient
+from ..helpers.clean_characters_data import clean_characters_data
 
 logger = logging.getLogger('console')
 
@@ -13,6 +14,7 @@ class AbstractView(web.View):
     bungie = BungieClient()
 
     async def get_membership_with_id(self, bungie_user_id):
+        #TODO : Add try/except when ID is wrong...
         async with self.bungie.client.acquire() as rest:
             user = await rest.fetch_membership_from_id(bungie_user_id)
 
@@ -65,13 +67,15 @@ class AbstractView(web.View):
         membership_id = await self.get_membership_id(bungie_user_id)
         membership_type = await self.get_membership_type(bungie_user_id)
         
+        character = {}
         async with self.bungie.client.acquire() as rest:
-            character = await rest.fetch_character(
+            character_data = await rest.fetch_character(
                 membership_id,
                 membership_type,
                 character_id,
                 [aiobungie.ComponentType.CHARACTERS],
             )
+            character[character_id] = clean_characters_data(character_data)
 
         return character
 
@@ -82,12 +86,13 @@ class AbstractView(web.View):
         characters = {}
         for one_character_id in characters_ids:
             async with self.bungie.client.acquire() as rest:
-                characters[one_character_id] = await rest.fetch_character(
+                character_data = await rest.fetch_character(
                     membership_id,
                     membership_type,
                     one_character_id,
                     [aiobungie.ComponentType.CHARACTERS],
                 )
+                characters[one_character_id] = clean_characters_data(character_data)
 
         return characters
     
@@ -101,7 +106,7 @@ class AbstractView(web.View):
                 membership_id,
                 membership_type,
                 character_id,
-                [aiobungie.ComponentType.CHARACTER_EQUIPMENT],
+                [aiobungie.ComponentType.CHARACTER_EQUIPMENT, aiobungie.ComponentType.CHARACTER_INVENTORY],
             )
 
         return character_equipement
