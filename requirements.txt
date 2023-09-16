@@ -2,6 +2,7 @@ apispec
 pandas
 aiohttp
 aiohttp_apispec
+aiohttp_swagger
 colorlog
 gunicorn
 environs
