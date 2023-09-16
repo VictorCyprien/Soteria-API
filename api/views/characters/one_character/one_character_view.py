@@ -6,11 +6,10 @@ from aiohttp_apispec import (
     response_schema,
 )
 
-from marshmallow import Schema, fields
-
 import logging
 from ...api import soteria_web
 from ...abstract_view import AbstractView
+from ....schemas.characters_infos_schema import OneCharacterResponseSchema
 
 logger = logging.getLogger('console')
 
@@ -36,7 +35,7 @@ class OneCharacterView(AbstractView):
             503: {"description": "Too many requests, wait a bit"},
         },
     )
-    #@response_schema(ReponseGetSchema(), 200, description="Success reponse")
+    @response_schema(OneCharacterResponseSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
         character_id = self.character_id
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
