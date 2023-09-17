@@ -1,0 +1,22 @@
+###
+
+@URL = "https://localhost:5000/"
+
+@ACCESS_TOKEN = token
+@BUNGIE_USER_ID = id
+@CHARACTER_ID = character_id
+
+###
+GET https://localhost:5000
+X-Access-Token: {{ACCESS_TOKEN}}
+X-Bungie-UserId: {{BUNGIE_USER_ID}}
+
+###
+POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/weapon
+Content-Type: application/json
+X-Access-Token: {{ACCESS_TOKEN}}
+X-Bungie-UserId: {{BUNGIE_USER_ID}}
+
+{
+    "weapon_id": -2145283996
+}
