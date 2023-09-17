@@ -148,3 +148,6 @@ settings.json
 
 certs/
 manifest-data/
+TODO
+data.ipynb
+demo.http
