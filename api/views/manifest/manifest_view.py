@@ -8,14 +8,14 @@ from aiohttp_apispec import (
 from marshmallow import Schema, fields
 
 import logging
+from .abstract_manifest_view import ManifestAbstractView
 from ..api import soteria_web
-from ..abstract_view import AbstractView
 from ...helpers.convert_sqlite_to_json import sqliteToJson
 
 logger = logging.getLogger('console')
 
 @soteria_web.view('/manifest')
-class ManifestView(AbstractView):
+class ManifestView(ManifestAbstractView):
 
     @docs(
         summary="Get and Download the manifest",

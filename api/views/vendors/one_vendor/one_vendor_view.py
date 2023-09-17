@@ -11,13 +11,14 @@ from aiohttp_apispec import (
 from marshmallow import Schema, fields
 
 import logging
+from ..abstract_vendor_view import VendorAbstractView
 from ...api import soteria_web
-from ...abstract_view import AbstractView
+from ...root_abstract_view import AbstractView
 
 logger = logging.getLogger('console')
 
 @soteria_web.view('/vendors/{vendor_id}')
-class OneVendorView(AbstractView):
+class OneVendorView(VendorAbstractView):
 
     @property
     def vendor_id(self) -> int:

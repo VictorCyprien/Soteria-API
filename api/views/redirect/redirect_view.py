@@ -7,8 +7,8 @@ import logging
 
 from marshmallow import Schema, fields
 
+from .abstract_redirect_view import RedirectAbstractView
 from ..api import soteria_web
-from ..abstract_view import AbstractView
 
 logger = logging.getLogger('console')
 
@@ -19,7 +19,7 @@ class RedirectParamsSchema(Schema):
 
 
 @soteria_web.view('/redirect')
-class RedirectView(AbstractView):
+class RedirectView(RedirectAbstractView):
 
     @docs(
         summary="This route is used by BungieAPI to retrive user's information",
@@ -38,8 +38,7 @@ class RedirectView(AbstractView):
         if code is None:
             raise web.HTTPNotFound(text="Code not found, aborting...")
         
-        async with self.bungie.client.acquire() as rest:
-            tokens = await rest.fetch_oauth2_tokens(code)
+        tokens = await self.get_tokens(code)
 
         return json_response({
             "access_token": tokens.access_token

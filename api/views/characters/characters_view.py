@@ -8,14 +8,14 @@ from aiohttp_apispec import (
 )
 
 import logging
+from .abstract_character_view import CharacterAbstractView
 from ..api import soteria_web
-from ..abstract_view import AbstractView
 from ...schemas.characters_infos_schema import CharactersResponseSchema
 
 logger = logging.getLogger('console')
 
 @soteria_web.view('/characters')
-class CharacterView(AbstractView):
+class CharacterView(CharacterAbstractView):
 
     @docs(
         summary="Characters route",

@@ -10,13 +10,13 @@ from aiohttp_apispec import (
 from marshmallow import Schema, fields
 
 import logging
+from .abstract_vendor_view import VendorAbstractView
 from ..api import soteria_web
-from ..abstract_view import AbstractView
 
 logger = logging.getLogger('console')
 
 @soteria_web.view('/vendors')
-class VendorsView(AbstractView):
+class VendorsView(VendorAbstractView):
 
     @docs(
         summary="Vendors route",
