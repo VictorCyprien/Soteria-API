@@ -9,13 +9,13 @@ from aiohttp_apispec import (
 from marshmallow import Schema, fields
 
 import logging
+from .abstract_equipement_view import EquipementAbstractView
 from ...api import soteria_web
-from ...abstract_view import AbstractView
 
 logger = logging.getLogger('console')
 
 @soteria_web.view('/characters/{character_id}/equipement')
-class CharacterEquipementView(AbstractView):
+class CharacterEquipementView(EquipementAbstractView):
     @property
     def character_id(self) -> int:
         character_id = self.request.match_info.get('character_id', "None")

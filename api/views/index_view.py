@@ -10,7 +10,7 @@ from marshmallow import Schema, fields
 
 import logging
 from .api import soteria_web
-from .abstract_view import AbstractView
+from .root_abstract_view import AbstractView
 from ..config import config
 
 logger = logging.getLogger('console')

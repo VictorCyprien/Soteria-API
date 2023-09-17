@@ -7,14 +7,14 @@ from aiohttp_apispec import (
 )
 
 import logging
+from ..abstract_character_view import CharacterAbstractView
 from ...api import soteria_web
-from ...abstract_view import AbstractView
 from ....schemas.characters_infos_schema import OneCharacterResponseSchema
 
 logger = logging.getLogger('console')
 
 @soteria_web.view('/characters/{character_id}')
-class OneCharacterView(AbstractView):
+class OneCharacterView(CharacterAbstractView):
 
     @property
     def character_id(self) -> int:

@@ -10,8 +10,9 @@ from aiohttp_apispec import (
 from marshmallow import Schema, fields
 
 import logging
+from ..abstract_manifest_view import ManifestAbstractView
 from ...api import soteria_web
-from ...abstract_view import AbstractView
+from ...root_abstract_view import AbstractView
 from ....helpers.list_to_dict import convert_list_to_dict
 
 logger = logging.getLogger('console')
@@ -24,7 +25,7 @@ class ManifestParamsSchema(Schema):
 
 
 @soteria_web.view('/manifest/{manifest_name}')
-class OneManifestView(AbstractView):
+class OneManifestView(ManifestAbstractView):
 
     @property
     def manifest_name(self) -> int:
