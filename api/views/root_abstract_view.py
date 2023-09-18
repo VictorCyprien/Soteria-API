@@ -27,7 +27,7 @@ class AbstractView(web.View):
         return membership_id
     
 
-    async def get_membership_type(self, bungie_user_id):
+    async def get_membership_type(self, bungie_user_id) -> int:
         user = await self.get_membership_with_id(bungie_user_id)
         try:
             membership_type = user["destinyMemberships"][0]["membershipType"]

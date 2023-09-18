@@ -66,7 +66,7 @@ class CharacterAbstractView(AbstractView):
         return characters
     
 
-    async def get_character_equipement(self, bungie_user_id: int, character_id: int):
+    async def get_character_equipement(self, bungie_user_id: int, character_id: int) -> Dict:
         membership_id = await self.get_membership_id(bungie_user_id)
         membership_type = await self.get_membership_type(bungie_user_id)
         
@@ -75,7 +75,7 @@ class CharacterAbstractView(AbstractView):
                 membership_id,
                 membership_type,
                 character_id,
-                [aiobungie.ComponentType.CHARACTER_EQUIPMENT, aiobungie.ComponentType.CHARACTER_INVENTORY],
+                [aiobungie.ComponentType.CHARACTER_INVENTORY],
             )
 
         return character_equipement
