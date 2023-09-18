@@ -18,6 +18,7 @@ from .manifest.one_manifest.one_manifest_view import OneManifestView
 from .vendors.abstract_vendor_view import VendorAbstractView
 from .vendors.vendors_view import VendorsView
 from .vendors.one_vendor.one_vendor_view import OneVendorView
+from .characters.equipement.weapon.weapon_root_view import WeaponView
 
 __all__ = [
     "soteria_web", 
@@ -40,4 +41,5 @@ __all__ = [
     "OneManifestView",
     "VendorsView",
     "OneVendorView",
+    "WeaponView",
 ]
