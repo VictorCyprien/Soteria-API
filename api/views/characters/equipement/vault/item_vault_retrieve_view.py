@@ -35,13 +35,13 @@ class VaultRetrieveItemView(EquipementAbstractView):
 
 
     @docs(
-        summary="Retrieve a item",
-        description="Retrieve a item (weapon or armor) from the vault for a character",
+        summary="Retrieve an item",
+        description="Retrieve an item (weapon, armor or other) from the vault for a character",
         responses={
             201: {"description": "Success response"},
             400: {"description": "Invalid request"},
             401: {"description": "Unauthorized"},
-            404: {"description": "Weapon or armor not found"},
+            404: {"description": "Item not found"},
             500: {"description": "Server error"},
             503: {"description": "Too many requests, wait a bit"},
         },

@@ -37,8 +37,8 @@ class ItemTransfertView(EquipementAbstractView):
 
 
     @docs(
-        summary="Transfert a item",
-        description="Transfert a item (weapon or armor) to a character",
+        summary="Transfert an item",
+        description="Transfert an item (weapon or armor) to a character",
         responses={
             201: {"description": "Success response"},
             400: {"description": "Invalid request"},

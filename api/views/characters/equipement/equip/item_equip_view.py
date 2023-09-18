@@ -34,7 +34,7 @@ class ItemEquipView(EquipementAbstractView):
 
 
     @docs(
-        summary="Equip item",
+        summary="Equip an item",
         description="Equip an item (weapon or armor) for a character",
         responses={
             201: {"description": "Success reponse"},

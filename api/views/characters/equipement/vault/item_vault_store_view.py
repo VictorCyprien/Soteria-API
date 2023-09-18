@@ -35,13 +35,13 @@ class VaultStoreItemView(EquipementAbstractView):
 
 
     @docs(
-        summary="Store a item",
-        description="Store a item (weapon or armor) to the vault",
+        summary="Store an item",
+        description="Store an item (weapon, armor or other) to the vault",
         responses={
             201: {"description": "Success response"},
             400: {"description": "Invalid request"},
             401: {"description": "Unauthorized"},
-            404: {"description": "Weapon or armor not found"},
+            404: {"description": "Item not found"},
             500: {"description": "Server error"},
             503: {"description": "Too many requests, wait a bit"},
         },
