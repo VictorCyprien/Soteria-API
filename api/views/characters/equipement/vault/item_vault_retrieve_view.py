@@ -7,15 +7,15 @@ from aiohttp_apispec import (
 )
 
 import logging
-from ...abstract_equipement_view import EquipementAbstractView
-from .....api import soteria_web
-from ......schemas.communs_schemas import TransfertResponseSchema
+from ..abstract_equipement_view import EquipementAbstractView
+from ....api import soteria_web
+from .....schemas.items_schemas import TransfertItemResponseSchema
 
 logger = logging.getLogger('console')
 
 
-@soteria_web.view('/characters/{character_id}/equipement/armor/{armor_id}/retrieve')
-class ArmorVaultRetrieveView(EquipementAbstractView):
+@soteria_web.view('/characters/{character_id}/equipement/{item_id}/retrieve')
+class VaultRetrieveItemView(EquipementAbstractView):
     @property
     def character_id(self) -> int:
         character_id = self.request.match_info.get('character_id', "None")
@@ -26,46 +26,46 @@ class ArmorVaultRetrieveView(EquipementAbstractView):
 
 
     @property
-    def armor_id(self) -> int:
-        armor_id = self.request.match_info.get('armor_id', "None")
+    def item_id(self) -> int:
+        item_id = self.request.match_info.get('item_id', "None")
         #We raise a NotFound when the number is not a positive number
-        if not armor_id.isdigit():
-            raise HTTPNotFound(text=f"The armor ID #{armor_id} is not valid !")
-        return int(armor_id)
+        if not item_id.isdigit():
+            raise HTTPNotFound(text=f"The item ID #{item_id} is not valid !")
+        return int(item_id)
 
 
     @docs(
-        summary="Retrieve Armor",
-        description="Retrieve a armor from the vault for a character",
+        summary="Retrieve a item",
+        description="Retrieve a item (weapon or armor) from the vault for a character",
         responses={
             201: {"description": "Success response"},
             400: {"description": "Invalid request"},
             401: {"description": "Unauthorized"},
-            404: {"description": "Inventory or weapon not found"},
+            404: {"description": "Weapon or armor not found"},
             500: {"description": "Server error"},
             503: {"description": "Too many requests, wait a bit"},
         },
     )
-    @response_schema(TransfertResponseSchema, 201, description="Success reponse")
+    @response_schema(TransfertItemResponseSchema, 201, description="Success reponse")
     async def post(self) -> web.Response:
         character_id = self.character_id
-        armor_id = self.armor_id
+        item_id = self.item_id
         access_token = str(self.request.headers['X-Access-Token'])
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
     
         membership_id = await self.get_membership_id(bungie_user_id)
         membership_type = await self.get_membership_type(bungie_user_id)
     
-        armor_retrieved = await self.retrieve_weapon_from_vault(
+        item_retrieved = await self.retrieve_item_from_vault(
             access_token,
-            armor_id,
+            item_id,
             character_id,
             membership_id,
             membership_type
         )
 
-        if not armor_retrieved:
-            raise HTTPNotFound(text="The armor is not on in the Vault")
+        if not item_retrieved:
+            raise HTTPNotFound(text="The item is not on in the Vault")
 
         return json_response(data={
             "status": "OK",

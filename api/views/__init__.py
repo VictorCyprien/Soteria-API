@@ -18,16 +18,12 @@ from .manifest.one_manifest.one_manifest_view import OneManifestView
 from .vendors.abstract_vendor_view import VendorAbstractView
 from .vendors.vendors_view import VendorsView
 from .vendors.one_vendor.one_vendor_view import OneVendorView
-from .characters.equipement.weapon.weapon_root_view import WeaponView
-from .characters.equipement.weapon.equip.weapon_equip_view import WeaponEquipView
-from .characters.equipement.weapon.transfert.weapon_transfert_view import WeaponTransfertView
-from .characters.equipement.weapon.vault.weapon_vault_store_view import WeaponVaultStoreView
-from .characters.equipement.weapon.vault.weapon_vault_retrieve_view import WeaponVaultRetrieveView
-from .characters.equipement.armor.armor_root_view import ArmorView
-from .characters.equipement.armor.equip.armor_equip_view import ArmorEquipView
-from .characters.equipement.armor.transfert.armor_transfert_view import ArmorTransfertView
-from .characters.equipement.armor.vault.armor_vault_store_view import ArmorVaultStoreView
-from .characters.equipement.armor.vault.armor_vault_retrieve_view import ArmorVaultRetrieveView
+from .characters.equipement.equip.item_equip_view import ItemEquipView
+from .characters.equipement.transfert.item_transfert_view import ItemTransfertView
+from .characters.equipement.vault.item_vault_store_view import VaultStoreItemView
+from .characters.equipement.vault.item_vault_retrieve_view import VaultRetrieveItemView
+
+
 
 __all__ = [
     "soteria_web", 
@@ -50,14 +46,8 @@ __all__ = [
     "OneManifestView",
     "VendorsView",
     "OneVendorView",
-    "WeaponView",
-    "WeaponEquipView",
-    "WeaponTransfertView",
-    "WeaponVaultStoreView",
-    "WeaponVaultRetrieveView",
-    "ArmorView",
-    "ArmorEquipView",
-    "ArmorTransfertView",
-    "ArmorVaultStoreView",
-    "ArmorVaultRetrieveView",
+    "ItemEquipView",
+    "ItemTransfertView",
+    "VaultStoreItemView",
+    "VaultRetrieveItemView",
 ]

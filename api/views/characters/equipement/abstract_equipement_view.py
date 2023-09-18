@@ -34,9 +34,9 @@ class EquipementAbstractView(CharacterAbstractView):
         return item_searched
     
 
-    async def get_equipment_object(
+    async def get_item(
         self, 
-        equipment_id: int,
+        item_id: int,
         membership_id: int,
         membership_type: int
     ):
@@ -44,7 +44,7 @@ class EquipementAbstractView(CharacterAbstractView):
             try:
                 item = await rest.fetch_item(
                     membership_id,
-                    equipment_id,
+                    item_id,
                     membership_type,
                     [aiobungie.ComponentType.ALL_ITEMS]
                 )
@@ -55,17 +55,17 @@ class EquipementAbstractView(CharacterAbstractView):
                     raise HTTPNotFound(text="This item doesn't exist")
         return item
     
-    async def transfert_weapon(
+    async def transfert_item(
         self, 
         access_token: str,
-        weapon_id: int,
+        item_id: int,
         character_equipment: Dict, 
         character_id_from: int, 
         character_id_to: int,
         membership_type: int
     ) -> bool:
-        weapon_transfered = False
-        item = self.get_item_in_equipment(character_equipment, weapon_id)
+        item_transfered = False
+        item = self.get_item_in_equipment(character_equipment, item_id)
         if item:
             async with self.bungie.client.acquire() as rest:
                 try:
@@ -84,23 +84,23 @@ class EquipementAbstractView(CharacterAbstractView):
                         character_id_to,
                         membership_type,
                     )
-                    weapon_transfered = True
+                    item_transfered = True
                 except HTTPError as error:
                     logger.warning(error)
                     raise HTTPNotFound(text="Something went wrong")
-        return weapon_transfered
+        return item_transfered
 
 
-    async def equip_weapon(
+    async def equip_item(
         self, 
         access_token: str, 
-        weapon_id: int, 
+        item_id: int, 
         character_equipment: Dict,
         character_id: int,
         membership_type: int
     ) -> bool:
-        weapon_equipped = False
-        item = self.get_item_in_equipment(character_equipment, weapon_id)
+        item_equipped = False
+        item = self.get_item_in_equipment(character_equipment, item_id)
         if item:
             async with self.bungie.client.acquire() as rest:
                 try:
@@ -110,25 +110,25 @@ class EquipementAbstractView(CharacterAbstractView):
                         character_id,
                         membership_type
                     )
-                    weapon_equipped = True
+                    item_equipped = True
                 except InternalServerError as error:
                     if error.error_status == "DestinyItemUniqueEquipRestricted":
                         raise HTTPBadRequest(text="You can't equip more than two exotic weapon")
                     if error.error_status == "DestinyItemNotFound":
                         raise HTTPNotFound(text="This item doesn't exist")
-        return weapon_equipped
+        return item_equipped
 
 
-    async def store_weapon_to_vault(
+    async def store_item_to_vault(
         self, 
         access_token: str, 
-        weapon_id: int, 
+        item_id: int, 
         character_equipment: Dict,
         character_id: int,
         membership_type: int
     ):
-        weapon_stored = False
-        item = self.get_item_in_equipment(character_equipment, weapon_id)
+        item_stored = False
+        item = self.get_item_in_equipment(character_equipment, item_id)
         if item:
             async with self.bungie.client.acquire() as rest:
                 try:
@@ -140,23 +140,23 @@ class EquipementAbstractView(CharacterAbstractView):
                         membership_type,
                         vault=True
                     )
-                    weapon_stored = True
+                    item_stored = True
                 except InternalServerError as error:
                     logger.exception(error)
                     if error.error_status == "DestinyItemNotFound":
                         raise HTTPNotFound(text="This item doesn't exist")
-        return weapon_stored
+        return item_stored
     
 
-    async def retrieve_weapon_from_vault(
+    async def retrieve_item_from_vault(
         self, 
         access_token: str, 
-        weapon_id: int,
+        item_id: int,
         character_id: int,
         membership_id: int,
         membership_type: int
     ):
-        weapon_retrieved = False
+        item_retrieved = False
 
         # Get vault content
         async with self.bungie.client.acquire() as rest:
@@ -167,7 +167,7 @@ class EquipementAbstractView(CharacterAbstractView):
                 access_token
             )
         
-        item = self.get_item_in_equipment(vault_content, weapon_id, isVault=True)
+        item = self.get_item_in_equipment(vault_content, item_id, isVault=True)
         if item:
             async with self.bungie.client.acquire() as rest:
                 try:
@@ -178,9 +178,9 @@ class EquipementAbstractView(CharacterAbstractView):
                         character_id,
                         membership_type,
                     )
-                    weapon_retrieved = True
+                    item_retrieved = True
                 except HTTPError as error:
                     logger.warning(error)
                     raise HTTPNotFound(text="Something went wrong")
 
-        return weapon_retrieved
+        return item_retrieved
