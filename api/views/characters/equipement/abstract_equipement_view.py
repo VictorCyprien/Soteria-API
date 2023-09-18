@@ -184,3 +184,30 @@ class EquipementAbstractView(CharacterAbstractView):
                     raise HTTPNotFound(text="Something went wrong")
 
         return item_retrieved
+
+
+    async def lock_item(
+        self, 
+        access_token: str,
+        lock_state: bool,
+        item_id: int, 
+        character_id: int,
+        membership_type: int
+    ) -> bool:
+        item_locked = False
+        async with self.bungie.client.acquire() as rest:
+            try:
+                await rest.set_item_lock_state(
+                    access_token,
+                    lock_state,
+                    item_id,
+                    character_id,
+                    membership_type
+                )
+                item_locked = True
+            except InternalServerError as error:
+                logger.exception(error)
+                assert False
+                if error.error_status == "DestinyItemNotFound":
+                    raise HTTPNotFound(text="This item doesn't exist")
+        return item_locked

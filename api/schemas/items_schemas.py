@@ -8,6 +8,13 @@ class ItemPayloadSchema(Schema):
     )
 
 
+class ItemLockSchema(Schema):
+    lock_state = fields.Boolean(
+        required=True,
+        metadata={"description": "The state of the lock we want. If True, we lock the item, else, we unlock it."}
+    )
+
+
 class EquipItemResponseSchema(Schema):
     status = fields.String()
 
