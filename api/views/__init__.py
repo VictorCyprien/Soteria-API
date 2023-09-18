@@ -21,6 +21,8 @@ from .vendors.one_vendor.one_vendor_view import OneVendorView
 from .characters.equipement.weapon.weapon_root_view import WeaponView
 from .characters.equipement.weapon.equip.weapon_equip_view import WeaponEquipView
 from .characters.equipement.weapon.transfert.weapon_transfert_view import WeaponTransfertView
+from .characters.equipement.weapon.vault.weapon_vault_store_view import WeaponVaultStoreView
+from .characters.equipement.weapon.vault.weapon_vault_retrieve_view import WeaponVaultRetrieveView
 
 __all__ = [
     "soteria_web", 
@@ -45,5 +47,7 @@ __all__ = [
     "OneVendorView",
     "WeaponView",
     "WeaponEquipView",
-    "WeaponTransfertView"
+    "WeaponTransfertView",
+    "WeaponVaultStoreView",
+    "WeaponVaultRetrieveView",
 ]
