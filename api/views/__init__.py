@@ -10,6 +10,8 @@ from .characters.characters_view import CharacterView
 from .characters.one_character.one_character_view import OneCharacterView
 from .characters.equipement.abstract_equipement_view import EquipementAbstractView
 from .characters.equipement.characters_equipement_view import CharacterEquipementView
+from .vault.abstract_vault_view import VaultAbstractView
+from .vault.vault_view import VaultView
 from .manifest.abstract_manifest_view import ManifestAbstractView
 from .manifest.manifest_view import ManifestView
 from .manifest.one_manifest.one_manifest_view import OneManifestView
@@ -30,6 +32,8 @@ __all__ = [
     "OneCharacterView",
     "EquipementAbstractView",
     "CharacterEquipementView",
+    "VaultAbstractView",
+    "VaultView",
     "ManifestAbstractView",
     "ManifestView",
     "VendorAbstractView",
