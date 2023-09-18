@@ -146,23 +146,37 @@ class EquipementAbstractView(CharacterAbstractView):
     async def retrieve_weapon_from_vault(
         self, 
         access_token: str, 
-        weapon_id: int, 
-        weapon_hash: int,
+        weapon_id: int,
         character_id: int,
+        membership_id: int,
         membership_type: int
     ):
         weapon_retrieved = False
+
+        # Get vault content
         async with self.bungie.client.acquire() as rest:
-            try:
-                await rest.transfer_item(
-                    access_token,
-                    weapon_id,
-                    weapon_hash,
-                    character_id,
-                    membership_type,
-                )
-                weapon_retrieved = True
-            except HTTPError as error:
-                logger.warning(error)
-                raise HTTPNotFound(text="Something went wrong")
-            return weapon_retrieved
+            vault_content = await rest.fetch_profile(
+                membership_id,
+                membership_type,
+                [aiobungie.ComponentType.PROFILE_INVENTORIES],
+                access_token
+            )
+        
+        for item in vault_content["profileInventory"]["data"]["items"]:
+            item_instance_id = int(item.get("itemInstanceId", 0))
+            if item_instance_id == weapon_id:
+                async with self.bungie.client.acquire() as rest:
+                    try:
+                        await rest.transfer_item(
+                            access_token,
+                            item["itemInstanceId"],
+                            item["itemHash"],
+                            character_id,
+                            membership_type,
+                        )
+                        weapon_retrieved = True
+                    except HTTPError as error:
+                        logger.warning(error)
+                        raise HTTPNotFound(text="Something went wrong")
+
+        return weapon_retrieved

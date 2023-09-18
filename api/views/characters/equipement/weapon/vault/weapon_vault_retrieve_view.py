@@ -59,20 +59,17 @@ class WeaponVaultRetrieveView(EquipementAbstractView):
     async def post(self) -> web.Response:
         character_id = self.character_id
         weapon_id = self.weapon_id
-        # Malveillance hash for test
-        weapon_hash = 204878059
         access_token = str(self.request.headers['X-Access-Token'])
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
     
+        membership_id = await self.get_membership_id(bungie_user_id)
         membership_type = await self.get_membership_type(bungie_user_id)
-
-        # TODO : Get the hash of a object with ID
     
         weapon_retrieved = await self.retrieve_weapon_from_vault(
             access_token,
             weapon_id,
-            weapon_hash,
             character_id,
+            membership_id,
             membership_type
         )
 
