@@ -1,6 +1,5 @@
 from aiohttp import web
 from aiohttp.web import json_response
-from aiobungie import HTTPError, InternalServerError
 from aiohttp.web_exceptions import HTTPNotFound
 from aiohttp_apispec import (
     docs,
@@ -8,19 +7,13 @@ from aiohttp_apispec import (
     request_schema
 )
 
-from marshmallow import Schema, fields
-
 import logging
 from ...abstract_equipement_view import EquipementAbstractView
 from .....api import soteria_web
-from ......schemas.weapon_infos_schema import WeaponPayloadSchema
-from ......config import config
+from ......schemas.communs_schemas import TransfertResponseSchema
+from ......schemas.armor_infos_schema import ArmorPayloadSchema
 
 logger = logging.getLogger('console')
-
-
-class TransfertResponseSchema(Schema):
-    status = fields.String()
 
 
 @soteria_web.view('/characters/{character_id}/equipement/weapon/{weapon_id}/transfert')
@@ -55,7 +48,7 @@ class WeaponTransfertView(EquipementAbstractView):
             503: {"description": "Too many requests, wait a bit"},
         },
     )
-    @request_schema(WeaponPayloadSchema())
+    @request_schema(ArmorPayloadSchema())
     @response_schema(TransfertResponseSchema, 201, description="Success reponse")
     async def post(self) -> web.Response:
         character_id = self.character_id

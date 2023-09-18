@@ -1,25 +1,17 @@
 from aiohttp import web
 from aiohttp.web import json_response
-from aiobungie import HTTPError, InternalServerError
 from aiohttp.web_exceptions import HTTPNotFound
 from aiohttp_apispec import (
     docs,
-    response_schema,
-    request_schema
+    response_schema
 )
-
-from marshmallow import Schema, fields
 
 import logging
 from ...abstract_equipement_view import EquipementAbstractView
 from .....api import soteria_web
-from ......schemas.weapon_infos_schema import WeaponPayloadSchema
-from ......config import config
+from ......schemas.communs_schemas import EquipResponseSchema
 
 logger = logging.getLogger('console')
-
-class EquipResponseSchema(Schema):
-    status = fields.String()
 
 @soteria_web.view('/characters/{character_id}/equipement/weapon/{weapon_id}/equip')
 class WeaponEquipView(EquipementAbstractView):

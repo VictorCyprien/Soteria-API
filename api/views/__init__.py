@@ -23,6 +23,11 @@ from .characters.equipement.weapon.equip.weapon_equip_view import WeaponEquipVie
 from .characters.equipement.weapon.transfert.weapon_transfert_view import WeaponTransfertView
 from .characters.equipement.weapon.vault.weapon_vault_store_view import WeaponVaultStoreView
 from .characters.equipement.weapon.vault.weapon_vault_retrieve_view import WeaponVaultRetrieveView
+from .characters.equipement.armor.armor_root_view import ArmorView
+from .characters.equipement.armor.equip.armor_equip_view import ArmorEquipView
+from .characters.equipement.armor.transfert.armor_transfert_view import ArmorTransfertView
+from .characters.equipement.armor.vault.armor_vault_store_view import ArmorVaultStoreView
+from .characters.equipement.armor.vault.armor_vault_retrieve_view import ArmorVaultRetrieveView
 
 __all__ = [
     "soteria_web", 
@@ -50,4 +55,9 @@ __all__ = [
     "WeaponTransfertView",
     "WeaponVaultStoreView",
     "WeaponVaultRetrieveView",
+    "ArmorView",
+    "ArmorEquipView",
+    "ArmorTransfertView",
+    "ArmorVaultStoreView",
+    "ArmorVaultRetrieveView",
 ]
