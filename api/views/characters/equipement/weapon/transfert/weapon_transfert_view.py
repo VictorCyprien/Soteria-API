@@ -62,16 +62,17 @@ class WeaponTransfertView(EquipementAbstractView):
         weapon_id = self.weapon_id
         access_token = str(self.request.headers['X-Access-Token'])
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
+
+        membership_id = await self.get_membership_id(bungie_user_id)
+        membership_type = await self.get_membership_type(bungie_user_id)
         
         data = self.request["data"]
         character_id_pull_equipment = data["character_id_pull_equipment"]
-        character_equipment = await self.get_character_equipement(bungie_user_id, character_id_pull_equipment)
-
-        if character_equipment.get("inventory", None) is None:
-            raise HTTPNotFound(text="Character not found")
-
-        if character_equipment["inventory"].get("data", None) is None:
-            raise HTTPNotFound(text="The inventory is private")
+        character_equipment = await self.get_character_equipement(
+            character_id_pull_equipment,
+            membership_id,
+            membership_type
+        )
         
         membership_type = await self.get_membership_type(bungie_user_id)
         weapon_transfered = await self.transfert_weapon(

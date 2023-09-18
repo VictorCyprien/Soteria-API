@@ -40,11 +40,15 @@ class CharacterEquipementView(EquipementAbstractView):
     async def get(self) -> web.Response:
         character_id = self.character_id
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
+
+        membership_id = await self.get_membership_id(bungie_user_id)
+        membership_type = await self.get_membership_type(bungie_user_id)
         
         # Get every character infos
         character = await self.get_character_equipement(
-            bungie_user_id,
-            character_id
+            character_id,
+            membership_id,
+            membership_type
         )
 
         return json_response(data=character)

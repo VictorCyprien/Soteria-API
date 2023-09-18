@@ -60,14 +60,14 @@ class WeaponEquipView(EquipementAbstractView):
         access_token = str(self.request.headers['X-Access-Token'])
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
 
+        membership_id = await self.get_membership_id(bungie_user_id)
         membership_type = await self.get_membership_type(bungie_user_id)
-        character_equipment = await self.get_character_equipement(bungie_user_id, character_id)
 
-        if character_equipment.get("inventory", None) is None:
-            raise HTTPNotFound(text="Character not found")
-
-        if character_equipment["inventory"].get("data", None) is None:
-            raise HTTPNotFound(text="The inventory is private")
+        character_equipment = await self.get_character_equipement(
+            character_id,
+            membership_id,
+            membership_type
+        )
 
         weapon_equipped = await self.equip_weapon(
             access_token,

@@ -31,14 +31,21 @@ class CharacterView(CharacterAbstractView):
     @response_schema(CharactersResponseSchema, 200, description="Success reponse")
     async def get(self) -> web.Response:
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
+
+        membership_id = await self.get_membership_id(bungie_user_id)
+        membership_type = await self.get_membership_type(bungie_user_id)
         
         # Retrive list of characters
-        characters_ids = await self.get_characters_ids(bungie_user_id)
+        characters_ids = await self.get_characters_ids(
+            membership_id,
+            membership_type
+        )
         
         # Get every character infos
         characters = await self.get_characters_infos(
-            bungie_user_id,
-            characters_ids
+            characters_ids,
+            membership_id,
+            membership_type
         )
 
         return json_response(data=characters)

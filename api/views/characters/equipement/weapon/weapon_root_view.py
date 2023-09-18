@@ -55,16 +55,25 @@ class WeaponView(EquipementAbstractView):
         character_id = self.character_id
         weapon_id = self.weapon_id
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
-
-        character = await self.get_character_equipement(bungie_user_id, character_id)
-        if character.get("inventory", None).get("data", None) is None:
-            raise HTTPNotFound("The inventory is private")
+        membership_id = await self.get_membership_id(bungie_user_id)
+        membership_type = await self.get_membership_type(bungie_user_id)
+        
+        character = await self.get_character_equipement(
+            character_id,
+            membership_id,
+            membership_type
+        )
         
         weapon = {}
         for item in character["inventory"]["data"]["items"]:
-            # Check the hash (ID) of the weapon payload and equipment
-            if item["itemHash"] == weapon_id:
-                assert item.get("itemInstanceId", None) is not None, "The instance ID of the item is None..."
-                weapon = item
+            # Check the ID of the weapon payload and equipment
+            # (NOT THE HASH)
+            item_instance_id = int(item.get("itemInstanceId", 0))
+            if item_instance_id == weapon_id:
+                weapon = await self.get_equipment_object(
+                    weapon_id,
+                    membership_id,
+                    membership_type
+                )
                     
         return json_response(data=weapon)
