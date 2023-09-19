@@ -8,6 +8,7 @@ from aiohttp_apispec import (
     validation_middleware
 )
 from aiohttp_swagger import setup_swagger
+import aiohttp_cors
 
 from .helpers.check_auth import auth_middleware
 
@@ -18,6 +19,17 @@ logger.info("|              Soteria API             |")
 logger.info(".--------------------------------------.")
 
 app = web.Application()
+cors = aiohttp_cors.setup(app, defaults={
+   "*": aiohttp_cors.ResourceOptions(
+        allow_credentials=True,
+        expose_headers="*",
+        allow_headers="*"
+    )
+})
+
+for route in list(app.router.routes()):
+    cors.add(route)
+
 logging.basicConfig(level=logging.DEBUG)
 
 from .views import soteria_web
