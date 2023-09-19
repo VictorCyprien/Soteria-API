@@ -10,12 +10,13 @@ logger = logging.getLogger('console')
 
 
 class CharacterAbstractView(AbstractView):
-    async def get_characters_ids(self, bungie_user_id: int) -> List[str]:
-        # cf https://github.com/Bungie-net/api/issues/147#issuecomment-330367099
-        # Bungie ID != Destiny ID
-        # Get membershipId to search list of characters
-        membership_id = await self.get_membership_id(bungie_user_id)
-        membership_type = await self.get_membership_type(bungie_user_id)
+    # cf https://github.com/Bungie-net/api/issues/147#issuecomment-330367099
+    # Bungie ID != Destiny ID
+    async def get_characters_ids(
+        self,
+        membership_id: int,
+        membership_type: int
+    ) -> List[str]:
 
         # Get profile with characters infos
         async with self.bungie.client.acquire() as rest:
@@ -31,9 +32,12 @@ class CharacterAbstractView(AbstractView):
         return list_characters
     
 
-    async def get_one_character_infos(self, bungie_user_id: int, character_id: List[int]) -> Dict:
-        membership_id = await self.get_membership_id(bungie_user_id)
-        membership_type = await self.get_membership_type(bungie_user_id)
+    async def get_one_character_infos(
+        self, 
+        character_id: List[int],
+        membership_id: int,
+        membership_type: int
+    ) -> Dict:
         
         character = {}
         async with self.bungie.client.acquire() as rest:
@@ -48,9 +52,12 @@ class CharacterAbstractView(AbstractView):
         return character
 
 
-    async def get_characters_infos(self, bungie_user_id: int, characters_ids: List[int]) -> Dict:
-        membership_id = await self.get_membership_id(bungie_user_id)
-        membership_type = await self.get_membership_type(bungie_user_id)
+    async def get_characters_infos(
+        self,
+        characters_ids: List[int],
+        membership_id: int,
+        membership_type: int
+    ) -> Dict:
         
         characters = {}
         for one_character_id in characters_ids:
@@ -66,16 +73,18 @@ class CharacterAbstractView(AbstractView):
         return characters
     
 
-    async def get_character_equipement(self, bungie_user_id: int, character_id: int):
-        membership_id = await self.get_membership_id(bungie_user_id)
-        membership_type = await self.get_membership_type(bungie_user_id)
-        
+    async def get_character_equipement(
+        self,
+        character_id: int,
+        membership_id: int,
+        membership_type: int
+    ) -> Dict:
         async with self.bungie.client.acquire() as rest:
             character_equipement = await rest.fetch_character(
                 membership_id,
                 membership_type,
                 character_id,
-                [aiobungie.ComponentType.CHARACTER_EQUIPMENT, aiobungie.ComponentType.CHARACTER_INVENTORY],
+                [aiobungie.ComponentType.CHARACTER_INVENTORY],
             )
 
         return character_equipement

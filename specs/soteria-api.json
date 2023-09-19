@@ -1,0 +1,706 @@
+{
+    "paths": {
+        "/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                },
+                "parameters": [],
+                "summary": "Index route",
+                "description": "Index route",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/redirect": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "code",
+                        "required": false,
+                        "type": "string",
+                        "default": null,
+                        "x-nullable": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "state",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "summary": "This route is used by BungieAPI to retrive user's information",
+                "description": "Get the informations of users",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/login": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "302": {
+                        "schema": {
+                            "$ref": "#/definitions/ReponseGet"
+                        },
+                        "description": "Redirection to OAuth login"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                },
+                "parameters": [],
+                "summary": "Login route",
+                "description": "Login route",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/characters": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [],
+                "summary": "Characters route",
+                "description": "Get the list characters ids of the current destiny 2 account",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/characters/{character_id}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "character_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "summary": "One character route",
+                "description": "Get the information of one character of the current destiny 2 account",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/characters/{character_id}/equipement": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "character_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "summary": "Characters equipement route",
+                "description": "Get the equipement of each character of the current destiny 2 account",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/vault": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [],
+                "summary": "Vault route",
+                "description": "Get the of the Vault for the current destiny 2 account",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/manifest": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [],
+                "summary": "Get and Download the manifest",
+                "description": "Get and Download the last manifest of Destiny 2 and build JSON file for each table",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/manifest/{manifest_name}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32",
+                        "default": null,
+                        "x-nullable": true,
+                        "description": "The ID of the entity data we want"
+                    },
+                    {
+                        "in": "path",
+                        "name": "manifest_name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "summary": "Get the entity of one manifest",
+                "description": "Get the entity id and data of one manifest",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/vendors": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [],
+                "summary": "Vendors route",
+                "description": "Get the list of vendors available in Destiny 2",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/vendors/{vendor_id}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "vendor_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "summary": "One Vendor route",
+                "description": "Get the informations of one vendor",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/characters/{character_id}/equipement/{item_id}/equip": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "Success reponse"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Weapon or armor not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "character_id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "item_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "summary": "Equip an item",
+                "description": "Equip an item (weapon or armor) for a character",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/characters/{character_id}/equipement/{item_id}/transfert": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "Success response"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Weapon or armor not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "body",
+                        "required": false,
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions/ItemPayload"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "character_id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "item_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "summary": "Transfert an item",
+                "description": "Transfert an item (weapon or armor) to a character",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/characters/{character_id}/equipement/{item_id}/store": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "Success response"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "character_id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "item_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "summary": "Store an item",
+                "description": "Store an item (weapon, armor or other) to the vault",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/characters/{character_id}/equipement/{item_id}/retrieve": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "Success response"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "character_id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "item_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "summary": "Retrieve an item",
+                "description": "Retrieve an item (weapon, armor or other) from the vault for a character",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/characters/{character_id}/equipement/{item_id}/lock": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "Success reponse"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Weapon or armor not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    },
+                    "503": {
+                        "description": "Too many requests, wait a bit"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "body",
+                        "required": false,
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions/ItemLock"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "character_id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "item_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "summary": "Lock an item",
+                "description": "Lock an item (weapon or armor)",
+                "produces": [
+                    "application/json"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "Soteria API : API that manage interaction from BungieAPI",
+        "version": "v1"
+    },
+    "swagger": "2.0",
+    "definitions": {
+        "IndexResponse": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "ReponseGet": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "CharacterData": {
+            "type": "object",
+            "properties": {
+                "dateLastPlayed": {
+                    "type": "string"
+                },
+                "minutesPlayedThisSession": {
+                    "type": "string"
+                },
+                "minutesPlayedTotal": {
+                    "type": "string"
+                },
+                "light": {
+                    "type": "string"
+                },
+                "stats": {
+                    "type": "object"
+                },
+                "raceType": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "classType": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "genderType": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "emblemPath": {
+                    "type": "string"
+                },
+                "emblemBackgroundPath": {
+                    "type": "string"
+                }
+            }
+        },
+        "CharactersResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "description": "The information of one or multiples characters",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/CharacterData"
+                    }
+                }
+            }
+        },
+        "OneCharacterResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "description": "The information of one character",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/CharacterData"
+                    }
+                }
+            }
+        },
+        "EquipItemResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "ItemPayload": {
+            "type": "object",
+            "properties": {
+                "character_id_pull_item": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "The ID of the character we want to get the item"
+                }
+            },
+            "required": [
+                "character_id_pull_item"
+            ]
+        },
+        "TransfertItemResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "ItemLock": {
+            "type": "object",
+            "properties": {
+                "lock_state": {
+                    "type": "boolean",
+                    "description": "The state of the lock we want. If True, we lock the item, else, we unlock it."
+                }
+            },
+            "required": [
+                "lock_state"
+            ]
+        }
+    }
+}

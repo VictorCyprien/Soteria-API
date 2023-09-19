@@ -39,11 +39,15 @@ class OneCharacterView(CharacterAbstractView):
     async def get(self) -> web.Response:
         character_id = self.character_id
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
+
+        membership_id = await self.get_membership_id(bungie_user_id)
+        membership_type = await self.get_membership_type(bungie_user_id)
         
         # Get character info
         character = await self.get_one_character_infos(
-            bungie_user_id,
-            character_id
+            character_id,
+            membership_id,
+            membership_type
         )
 
         return json_response(data=character)

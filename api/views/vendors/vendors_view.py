@@ -34,9 +34,15 @@ class VendorsView(VendorAbstractView):
         access_token = self.request.headers['X-Access-Token']
         bungie_user_id = self.request.headers['X-Bungie-UserId']
 
+        membership_id = await self.get_membership_id(bungie_user_id)
+        membership_type = await self.get_membership_type(bungie_user_id)
+        character_id = await self.get_characters_ids(membership_id, membership_type)
+
         list_vendors = await self.get_list_vendors(
             access_token,
-            bungie_user_id
+            character_id[0],
+            membership_id,
+            membership_type
         )
 
         return json_response(data=list_vendors)
