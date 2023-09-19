@@ -63,3 +63,7 @@ build_docker_image:
 
 build_docker_container:
 	docker run -d -p 5000:5000 --env-file .env --name soteria-api
+
+
+build_client:
+	java -jar ../swagger-codegen-cli.jar generate -i ./specs/soteria-api.json -l typescript-angular -o ../swagger_client/soteria-api
