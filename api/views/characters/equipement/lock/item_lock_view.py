@@ -59,16 +59,13 @@ class ItemLockView(EquipementAbstractView):
 
         membership_type = await self.get_membership_type(bungie_user_id)
 
-        item_locked = await self.lock_item(
+        await self.lock_item(
             access_token,
             lock_state,
             item_id,
             character_id,
             membership_type
         )
-
-        if not item_locked:
-            raise HTTPNotFound(text="The item is not on this character")
                     
         return json_response(data={
             "status": "OK",

@@ -193,8 +193,7 @@ class EquipementAbstractView(CharacterAbstractView):
         item_id: int, 
         character_id: int,
         membership_type: int
-    ) -> bool:
-        item_locked = False
+    ):
         async with self.bungie.client.acquire() as rest:
             try:
                 await rest.set_item_lock_state(
@@ -204,10 +203,6 @@ class EquipementAbstractView(CharacterAbstractView):
                     character_id,
                     membership_type
                 )
-                item_locked = True
-            except InternalServerError as error:
-                logger.exception(error)
-                assert False
+            except NotFound as error:
                 if error.error_status == "DestinyItemNotFound":
-                    raise HTTPNotFound(text="This item doesn't exist")
-        return item_locked
+                    raise HTTPNotFound(text="The item is not on this character")
