@@ -1,12 +1,13 @@
 from aiohttp import web
 from aiohttp.web_exceptions import HTTPNotFound
+from aiohttp_cors import CorsViewMixin
 import logging
 
 from ..client.bungie_api import BungieClient
 
 logger = logging.getLogger('console')
 
-class AbstractView(web.View):
+class AbstractView(web.View, CorsViewMixin):
     bungie = BungieClient()
 
     async def get_membership_with_id(self, bungie_user_id):
