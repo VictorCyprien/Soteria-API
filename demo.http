@@ -2,10 +2,11 @@
 
 @URL = "https://localhost:5000/"
 
-@ACCESS_TOKEN = key
+@ACCESS_TOKEN = token
 @BUNGIE_USER_ID = id
 @CHARACTER_ID = id
 @WEAPON_ID = id
+@ARMOR_ID = id
 
 
 ###
@@ -14,35 +15,78 @@ X-Access-Token: {{ACCESS_TOKEN}}
 X-Bungie-UserId: {{BUNGIE_USER_ID}}
 
 
-###
-POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/weapon/{{WEAPON_ID}}/transfert
+
+### Transfert weapon from warlock to titan
+POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/{{WEAPON_ID}}/transfert
 Content-Type: application/json
 X-Access-Token: {{ACCESS_TOKEN}}
 X-Bungie-UserId: {{BUNGIE_USER_ID}}
 
 {
-    "character_id_pull_equipment": 2305843009331614287
+    "character_id_pull_item": 2305843009331614287
 }
 
 
-###
-POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/weapon/{{WEAPON_ID}}/equip
+### Equip weapon for titan
+POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/{{WEAPON_ID}}/equip
 Content-Type: application/json
 X-Access-Token: {{ACCESS_TOKEN}}
 X-Bungie-UserId: {{BUNGIE_USER_ID}}
 
 
-###
-POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/weapon/{{WEAPON_ID}}/store
+### Store weapon to the vault
+POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/{{WEAPON_ID}}/store
 Content-Type: application/json
 X-Access-Token: {{ACCESS_TOKEN}}
 X-Bungie-UserId: {{BUNGIE_USER_ID}}
 
 
-###
-POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/weapon/{{WEAPON_ID}}/retrieve
+### Get weapon from the vault
+POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/{{WEAPON_ID}}/retrieve
 Content-Type: application/json
 X-Access-Token: {{ACCESS_TOKEN}}
 X-Bungie-UserId: {{BUNGIE_USER_ID}}
 
-###
+
+
+### Transfert armor from warlock to titan
+POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/{{ARMOR_ID}}/transfert
+Content-Type: application/json
+X-Access-Token: {{ACCESS_TOKEN}}
+X-Bungie-UserId: {{BUNGIE_USER_ID}}
+
+{
+    "character_id_pull_item": 2305843009331614287
+}
+
+
+### Equip armor for titan
+POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/{{ARMOR_ID}}/equip
+Content-Type: application/json
+X-Access-Token: {{ACCESS_TOKEN}}
+X-Bungie-UserId: {{BUNGIE_USER_ID}}
+
+
+### Store armor to the vault
+POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/{{ARMOR_ID}}/store
+Content-Type: application/json
+X-Access-Token: {{ACCESS_TOKEN}}
+X-Bungie-UserId: {{BUNGIE_USER_ID}}
+
+
+### Get armor from the vault
+POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/{{ARMOR_ID}}/retrieve
+Content-Type: application/json
+X-Access-Token: {{ACCESS_TOKEN}}
+X-Bungie-UserId: {{BUNGIE_USER_ID}}
+
+
+### Lock the current item
+POST https://localhost:5000/characters/{{CHARACTER_ID}}/equipement/{{WEAPON_ID}}/lock
+Content-Type: application/json
+X-Access-Token: {{ACCESS_TOKEN}}
+X-Bungie-UserId: {{BUNGIE_USER_ID}}
+
+{
+    "lock_state": true
+}
