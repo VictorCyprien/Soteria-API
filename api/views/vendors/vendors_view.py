@@ -31,6 +31,8 @@ class VendorsView(VendorAbstractView):
     )
     #@response_schema(ReponseGetSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
+        self.check_auth(self.request)
+        
         access_token = self.request.headers['X-Access-Token']
         bungie_user_id = self.request.headers['X-Bungie-UserId']
 

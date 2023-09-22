@@ -38,6 +38,8 @@ class CharacterEquipementView(EquipementAbstractView):
     )
     #@response_schema(ReponseGetSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
+        self.check_auth(self.request)
+        
         character_id = self.character_id
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
 

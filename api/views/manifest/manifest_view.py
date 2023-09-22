@@ -30,6 +30,8 @@ class ManifestView(ManifestAbstractView):
     )
     #@response_schema(ReponseGetSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
+        self.check_auth(self.request)
+        
         async with self.bungie.client.acquire() as rest:
             last_manifest_version = await rest.fetch_manifest_version()
             current_manifest_version = self.get_manifest_version()

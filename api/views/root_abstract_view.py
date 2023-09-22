@@ -1,5 +1,6 @@
 from aiohttp import web
-from aiohttp.web_exceptions import HTTPNotFound
+from aiohttp.web import Request
+from aiohttp.web_exceptions import HTTPNotFound, HTTPUnauthorized
 from aiohttp_cors import CorsViewMixin
 import logging
 
@@ -37,3 +38,10 @@ class AbstractView(web.View, CorsViewMixin):
             raise HTTPNotFound(text="Profile not found")
         
         return membership_type
+
+
+    def check_auth(self, request: Request):
+        access_token = request.headers.get('X-Access-Token', None)
+        user_id = request.headers.get('X-Bungie-Userid', None)
+        if access_token is None or user_id is None:
+            raise HTTPUnauthorized(text="Not Authenticated")

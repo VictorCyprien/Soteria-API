@@ -48,6 +48,8 @@ class OneManifestView(ManifestAbstractView):
     @querystring_schema(ManifestParamsSchema)
     #@response_schema(ReponseGetSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
+        self.check_auth(self.request)
+        
         manifest_name = self.manifest_name
         params = self.request['querystring']
         entity_id = params.get("id", None)

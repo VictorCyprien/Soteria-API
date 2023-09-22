@@ -30,6 +30,8 @@ class CharacterView(CharacterAbstractView):
     )
     @response_schema(CharactersResponseSchema, 200, description="Success reponse")
     async def get(self) -> web.Response:
+        self.check_auth(self.request)
+        
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
 
         membership_id = await self.get_membership_id(bungie_user_id)

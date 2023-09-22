@@ -51,6 +51,8 @@ class ItemTransfertView(EquipementAbstractView):
     @request_schema(ItemPayloadSchema())
     @response_schema(TransfertItemResponseSchema, 201, description="Success reponse")
     async def post(self) -> web.Response:
+        self.check_auth(self.request)
+        
         character_id = self.character_id
         item_id = self.item_id
         access_token = str(self.request.headers['X-Access-Token'])
