@@ -8,9 +8,9 @@ logger = logging.getLogger('console')
 
 class LoginAbstractView(AbstractView):
 
-    async def login(self):
+    async def generate_oauth_url(self):
         async with self.bungie.client.acquire() as rest:
             oauth_url = rest.build_oauth2_url()
 
             assert oauth_url is not None, "Make sure client ID and secret are set AND correct !"
-            raise web.HTTPFound(location=oauth_url.url)
+            return oauth_url

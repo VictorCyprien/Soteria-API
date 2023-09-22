@@ -1,4 +1,5 @@
 from aiohttp import web
+from aiohttp.web import json_response
 from aiohttp_apispec import (
     docs,
     response_schema
@@ -12,8 +13,8 @@ from ..api import soteria_web
 
 logger = logging.getLogger('console')
 
-class ReponseGetSchema(Schema):
-    status = fields.String()
+class ReponseLoginSchema(Schema):
+    url = fields.String()
 
 @soteria_web.view('/login')
 class LoginView(LoginAbstractView):
@@ -27,6 +28,10 @@ class LoginView(LoginAbstractView):
             500: {"description": "Server error"},
         },
     )
-    @response_schema(ReponseGetSchema(), 302, description="Redirection to OAuth login")
+    @response_schema(ReponseLoginSchema(), 200, description="Generate a new OAuth link")
     async def get(self) -> web.Response:
-        await self.login()
+        url = await self.generate_oauth_url()
+        res = {
+            "url": url.url
+        }
+        return json_response(data=res)
