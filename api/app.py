@@ -7,11 +7,10 @@ from aiohttp_apispec import (
     setup_aiohttp_apispec,
     validation_middleware
 )
+
 from aiohttp_swagger import setup_swagger
 import aiohttp_cors
 
-from .helpers.check_auth import auth_middleware
-from .views.root_abstract_view import AbstractView
 
 logger: logging.Logger = logging.getLogger('console')
 
@@ -27,7 +26,6 @@ from .views import soteria_web
 app.add_routes(soteria_web)
 
 app.middlewares.append(validation_middleware)
-app.middlewares.append(auth_middleware)
 
 ctx = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH, cafile="./certs/certificate.pem")
 ctx.load_cert_chain("./certs/certificate.pem", "./certs/key.pem")
@@ -52,7 +50,7 @@ cors = aiohttp_cors.setup(app, defaults={
     "*": aiohttp_cors.ResourceOptions(
             allow_credentials=True,
             expose_headers="*",
-            allow_headers=("X-Access-Token", "X-Bungie-Userid"),
+            allow_headers="*",
         )
 })
 
