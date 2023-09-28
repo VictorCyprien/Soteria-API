@@ -15,7 +15,7 @@ class EquipementAbstractView(CharacterAbstractView):
         items = character_equipment["inventory"]["data"]["items"] if not isVault else \
             character_equipment["profileInventory"]["data"]["items"]
         
-        # Check the hash (ID) of the weapon payload and equipment
+        # Check the ID of the equipment
         item_searched = [item for item in items if int(item.get('itemInstanceId', 0)) == item_id]
         if not item_searched:
             raise HTTPBadRequest(text="Item not found in the inventory")
@@ -28,7 +28,7 @@ class EquipementAbstractView(CharacterAbstractView):
             if item["transferStatus"] == 1:
                 raise HTTPBadRequest(text="You can't transfert because it's already equip")
             if item["transferStatus"] == 2:
-                raise HTTPBadRequest(text="This weapon cannot be transfered")
+                raise HTTPBadRequest(text="This equipment cannot be transfered")
             if item["transferStatus"] == 4:
                 raise HTTPBadRequest(text="There is no space remaining for the item you want to tranfert")
         return item
