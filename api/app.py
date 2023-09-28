@@ -10,6 +10,7 @@ from aiohttp_apispec import (
 
 from aiohttp_swagger import setup_swagger
 import aiohttp_cors
+from aiohttp_cache import setup_cache
 
 
 logger: logging.Logger = logging.getLogger('console')
@@ -22,6 +23,10 @@ app = web.Application()
 
 logging.basicConfig(level=logging.DEBUG)
 
+# Add cache
+setup_cache(app)
+
+# Add Web views
 from .views import soteria_web
 app.add_routes(soteria_web)
 
@@ -29,6 +34,8 @@ app.middlewares.append(validation_middleware)
 
 ctx = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH, cafile="./certs/certificate.pem")
 ctx.load_cert_chain("./certs/certificate.pem", "./certs/key.pem")
+
+# Add swagger docs
 
 setup_aiohttp_apispec(
     app=app, 
@@ -45,6 +52,8 @@ async def swagger(app):
     )
 
 app.on_startup.append(swagger)
+
+# Add cors for each route
 
 cors = aiohttp_cors.setup(app, defaults={
     "*": aiohttp_cors.ResourceOptions(
