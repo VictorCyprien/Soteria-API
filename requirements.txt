@@ -3,6 +3,7 @@ pandas
 aiohttp
 aiohttp_apispec
 aiohttp_swagger
+aiohttp-cache
 aiohttp_cors
 colorlog
 gunicorn

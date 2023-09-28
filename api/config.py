@@ -16,6 +16,9 @@ class Config:
         self.BUNGIE_API_CLIENT_ID = env.int("BUNGIE_API_CLIENT_ID", None)
         self.BUNGIE_API_CLIENT_SECRET = env.str("BUNGIE_API_CLIENT_SECRET", "")
 
+        # Cache
+        self.CACHE_TIME_EXPIRE = env.int("CACHE_TIME", 20)
+
     @property
     def logger_config(self):
         return {

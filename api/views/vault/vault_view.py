@@ -1,19 +1,20 @@
-from typing import List
 from aiohttp import web
-import aiobungie
 from aiohttp.web import json_response
 from aiohttp_apispec import (
     docs,
     response_schema,
 )
+from aiohttp_cache import cache
 
 import logging
 from .abstract_vault_view import VaultAbstractView
 from ..api import soteria_web
+from ...config import config
 
 logger = logging.getLogger('console')
 
 @soteria_web.view('/vault')
+@cache(expires=config.CACHE_TIME_EXPIRE)
 class VaultView(VaultAbstractView):
 
     @docs(
