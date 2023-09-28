@@ -5,16 +5,17 @@ from aiohttp_apispec import (
     docs,
     response_schema,
 )
-
-from marshmallow import Schema, fields
+from aiohttp_cache import cache
 
 import logging
 from .abstract_equipement_view import EquipementAbstractView
 from ...api import soteria_web
+from ....config import config
 
 logger = logging.getLogger('console')
 
 @soteria_web.view('/characters/{character_id}/equipement')
+@cache(expires=config.CACHE_TIME_EXPIRE)
 class CharacterEquipementView(EquipementAbstractView):
     @property
     def character_id(self) -> int:
@@ -27,7 +28,7 @@ class CharacterEquipementView(EquipementAbstractView):
 
     @docs(
         summary="Characters equipement route",
-        description="Get the equipement of each character of the current destiny 2 account",
+        description="Get the equipement of one character",
         responses={
             200: {"description": "OK"},
             400: {"description": "Invalid request"},
@@ -46,7 +47,7 @@ class CharacterEquipementView(EquipementAbstractView):
         membership_id = await self.get_membership_id(bungie_user_id)
         membership_type = await self.get_membership_type(bungie_user_id)
         
-        # Get every character infos
+        # Get current character's equipment
         character = await self.get_character_equipement(
             character_id,
             membership_id,

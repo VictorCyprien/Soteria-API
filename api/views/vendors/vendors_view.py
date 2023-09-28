@@ -1,21 +1,20 @@
-from typing import List
 from aiohttp import web
-import aiobungie
 from aiohttp.web import json_response
 from aiohttp_apispec import (
     docs,
     response_schema,
 )
-
-from marshmallow import Schema, fields
+from aiohttp_cache import cache
 
 import logging
 from .abstract_vendor_view import VendorAbstractView
 from ..api import soteria_web
+from ...config import config
 
 logger = logging.getLogger('console')
 
 @soteria_web.view('/vendors')
+@cache(expires=config.CACHE_TIME_EXPIRE)
 class VendorsView(VendorAbstractView):
 
     @docs(

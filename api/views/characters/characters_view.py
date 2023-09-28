@@ -1,20 +1,21 @@
-from typing import List
 from aiohttp import web
-import aiobungie
 from aiohttp.web import json_response
 from aiohttp_apispec import (
     docs,
     response_schema,
 )
+from aiohttp_cache import cache
 
 import logging
 from .abstract_character_view import CharacterAbstractView
 from ..api import soteria_web
 from ...schemas.characters_infos_schema import CharactersResponseSchema
+from ...config import config
 
 logger = logging.getLogger('console')
 
 @soteria_web.view('/characters')
+@cache(expires=config.CACHE_TIME_EXPIRE)
 class CharacterView(CharacterAbstractView):
 
     @docs(

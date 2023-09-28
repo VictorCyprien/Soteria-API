@@ -5,6 +5,7 @@ from aiohttp_apispec import (
     docs,
     response_schema
 )
+from aiohttp_cache import cache
 
 from marshmallow import Schema, fields
 
@@ -23,6 +24,7 @@ class IndexResponseSchema(Schema):
 
 
 @soteria_web.view('/')
+@cache(expires=config.CACHE_TIME_EXPIRE)
 class IndexView(AbstractView):
 
     @docs(
