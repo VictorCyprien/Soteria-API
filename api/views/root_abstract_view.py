@@ -1,10 +1,10 @@
 from aiohttp import web
 from aiohttp.web import Request
-from aiohttp.web_exceptions import HTTPNotFound, HTTPUnauthorized
 from aiohttp_cors import CorsViewMixin
 import logging
 
 from ..client.bungie_api import BungieClient
+from ..helpers.errors_handler import BadRequest, Unauthorized, NotFound, ReasonError
 
 logger = logging.getLogger('console')
 
@@ -24,7 +24,7 @@ class AbstractView(web.View, CorsViewMixin):
             membership_id = user["destinyMemberships"][0]["membershipId"]
         except (TypeError, KeyError):
             logger.warning("No profil info found...")
-            raise HTTPNotFound(text="Profile not found")
+            raise NotFound(ReasonError.PROFILE_NOT_FOUND.value)
         
         return membership_id
     
@@ -35,7 +35,7 @@ class AbstractView(web.View, CorsViewMixin):
             membership_type = user["destinyMemberships"][0]["membershipType"]
         except (TypeError, KeyError):
             logger.warning("No profil info found...")
-            raise HTTPNotFound(text="Profile not found")
+            raise NotFound(ReasonError.PROFILE_NOT_FOUND.value)
         
         return membership_type
 
@@ -44,4 +44,4 @@ class AbstractView(web.View, CorsViewMixin):
         access_token = request.headers.get('X-Access-Token', None)
         user_id = request.headers.get('X-Bungie-Userid', None)
         if access_token is None or user_id is None:
-            raise HTTPUnauthorized(text="Not Authenticated")
+            raise Unauthorized(ReasonError.NOT_AUTHENTICATED.value)

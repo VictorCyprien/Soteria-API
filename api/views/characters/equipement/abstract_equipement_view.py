@@ -2,9 +2,9 @@ from typing import Dict, List
 import logging
 import aiobungie
 from aiobungie import HTTPError, InternalServerError, NotFound
-from aiohttp.web_exceptions import HTTPBadRequest, HTTPNotFound
 
 from ... import CharacterAbstractView
+from ....helpers.errors_handler import NotFound, BadRequest, ReasonError
 
 logger = logging.getLogger('console')
 
@@ -18,7 +18,7 @@ class EquipementAbstractView(CharacterAbstractView):
         # Check the ID of the equipment
         item_searched = [item for item in items if int(item.get('itemInstanceId', 0)) == item_id]
         if not item_searched:
-            raise HTTPBadRequest(text="Item not found in the inventory")
+            return {}
         item = item_searched[0]
         # 0 : Can be tranfered
         # 1 : You can't transfert because it's already equip
@@ -26,11 +26,11 @@ class EquipementAbstractView(CharacterAbstractView):
         # 4 : There is no space remaining for the item you want to tranfert
         if not item["transferStatus"] == 0:
             if item["transferStatus"] == 1:
-                raise HTTPBadRequest(text="You can't transfert because it's already equip")
+                raise BadRequest(ReasonError.EQUIPMENT_ALREADY_EQUIPED)
             if item["transferStatus"] == 2:
-                raise HTTPBadRequest(text="This equipment cannot be transfered")
+                raise BadRequest(ReasonError.EQUIPMENT_CANNOT_BE_TRANSFERED)
             if item["transferStatus"] == 4:
-                raise HTTPBadRequest(text="There is no space remaining for the item you want to tranfert")
+                raise BadRequest(ReasonError.NO_SPACE_REMAINING)
         return item
     
 
@@ -52,7 +52,7 @@ class EquipementAbstractView(CharacterAbstractView):
             except NotFound as error:
                 logger.exception(error)
                 if error.error_status == "DestinyItemNotFound":
-                    raise HTTPNotFound(text="This item doesn't exist")
+                    raise NotFound(ReasonError.ITEM_NOT_FOUND.value)
         return item
     
     async def transfert_item(
@@ -87,7 +87,7 @@ class EquipementAbstractView(CharacterAbstractView):
                     item_transfered = True
                 except HTTPError as error:
                     logger.warning(error)
-                    raise HTTPNotFound(text="Something went wrong")
+                    raise BadRequest(ReasonError.BUNGIE_API_ERROR.value)
         return item_transfered
 
 
@@ -113,9 +113,9 @@ class EquipementAbstractView(CharacterAbstractView):
                     item_equipped = True
                 except InternalServerError as error:
                     if error.error_status == "DestinyItemUniqueEquipRestricted":
-                        raise HTTPBadRequest(text="You can't equip more than two exotic weapon")
+                        raise BadRequest(ReasonError.EQUIP_TWO_EXOTIC.value)
                     if error.error_status == "DestinyItemNotFound":
-                        raise HTTPNotFound(text="This item doesn't exist")
+                        raise NotFound(ReasonError.ITEM_NOT_FOUND.value)
         return item_equipped
 
 
@@ -144,7 +144,7 @@ class EquipementAbstractView(CharacterAbstractView):
                 except InternalServerError as error:
                     logger.exception(error)
                     if error.error_status == "DestinyItemNotFound":
-                        raise HTTPNotFound(text="This item doesn't exist")
+                        raise NotFound(ReasonError.ITEM_NOT_FOUND.value)
         return item_stored
     
 
@@ -181,7 +181,7 @@ class EquipementAbstractView(CharacterAbstractView):
                     item_retrieved = True
                 except HTTPError as error:
                     logger.warning(error)
-                    raise HTTPNotFound(text="Something went wrong")
+                    raise BadRequest(ReasonError.BUNGIE_API_ERROR.value)
 
         return item_retrieved
 
@@ -205,4 +205,4 @@ class EquipementAbstractView(CharacterAbstractView):
                 )
             except NotFound as error:
                 if error.error_status == "DestinyItemNotFound":
-                    raise HTTPNotFound(text="The item is not on this character")
+                    raise NotFound(ReasonError.ITEM_NOT_IN_CHARACTER.value)

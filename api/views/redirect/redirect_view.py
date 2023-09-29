@@ -9,6 +9,7 @@ from marshmallow import Schema, fields
 
 from .abstract_redirect_view import RedirectAbstractView
 from ..api import soteria_web
+from ...helpers.errors_handler import NotFound, ReasonError
 
 logger = logging.getLogger('console')
 
@@ -42,7 +43,7 @@ class RedirectView(RedirectAbstractView):
         code = params.get("code")
 
         if code is None:
-            raise web.HTTPNotFound(text="Code not found, aborting...")
+            raise NotFound(ReasonError.REDIRECT_ERROR.value)
         
         tokens = await self.get_tokens(code)
         user_id = await self.bungie.get_user_infos(tokens.access_token)

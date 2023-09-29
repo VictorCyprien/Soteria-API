@@ -1,6 +1,5 @@
 from aiohttp import web
 from aiohttp.web import json_response
-from aiohttp.web_exceptions import HTTPNotFound
 from aiohttp_apispec import (
     docs,
     response_schema
@@ -10,6 +9,7 @@ import logging
 from ..abstract_equipement_view import EquipementAbstractView
 from ....api import soteria_web
 from .....schemas.items_schemas import TransfertItemResponseSchema
+from .....helpers.errors_handler import NotFound, ReasonError
 
 logger = logging.getLogger('console')
 
@@ -21,7 +21,7 @@ class VaultStoreItemView(EquipementAbstractView):
         character_id = self.request.match_info.get('character_id', "None")
         #We raise a NotFound when the number is not a positive number
         if not character_id.isdigit():
-            raise HTTPNotFound(text=f"The character ID #{character_id} is not valid !")
+            raise NotFound(text=f"The character ID #{character_id} is not valid !")
         return int(character_id)
 
 
@@ -30,7 +30,7 @@ class VaultStoreItemView(EquipementAbstractView):
         item_id = self.request.match_info.get('item_id', "None")
         #We raise a NotFound when the number is not a positive number
         if not item_id.isdigit():
-            raise HTTPNotFound(text=f"The item ID #{item_id} is not valid !")
+            raise NotFound(text=f"The item ID #{item_id} is not valid !")
         return int(item_id)
 
 
@@ -73,7 +73,7 @@ class VaultStoreItemView(EquipementAbstractView):
         )
 
         if not item_stored:
-            raise HTTPNotFound(text="The item is not on this character or is equiped")
+            raise NotFound(ReasonError.ITEM_CANNOT_BE_STORED_IN_VAULT.value)
 
         return json_response(data={
             "status": "OK",

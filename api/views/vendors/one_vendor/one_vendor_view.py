@@ -1,6 +1,5 @@
 from aiohttp import web
 from aiohttp.web import json_response
-from aiohttp.web_exceptions import HTTPNotFound
 from aiohttp_apispec import (
     docs,
     response_schema,
@@ -11,6 +10,7 @@ import logging
 from ..abstract_vendor_view import VendorAbstractView
 from ...api import soteria_web
 from ....config import config
+from ....helpers.errors_handler import NotFound
 
 logger = logging.getLogger('console')
 
@@ -23,7 +23,7 @@ class OneVendorView(VendorAbstractView):
         vendor_id = self.request.match_info.get('vendor_id', "None")
         #We raise a NotFound when the number is not a positive number
         if not vendor_id.isdigit():
-            raise HTTPNotFound(text=f"The vendor ID #{vendor_id} is not valid !")
+            raise NotFound(text=f"The vendor ID #{vendor_id} is not valid !")
         return int(vendor_id)
 
     @docs(

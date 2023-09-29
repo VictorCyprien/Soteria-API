@@ -20,6 +20,7 @@ logger = logging.getLogger('console')
 class IndexResponseSchema(Schema):
     name = fields.String()
     user = fields.String()
+    # TODO : Rename to bungie_user_id
     user_id = fields.Integer(required=False)
 
 
