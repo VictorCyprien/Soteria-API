@@ -1,6 +1,5 @@
 from aiohttp import web
 from aiohttp.web import json_response
-from aiohttp.web_exceptions import HTTPNotFound
 from aiohttp_apispec import (
     docs,
     response_schema,
@@ -12,6 +11,7 @@ from ..abstract_character_view import CharacterAbstractView
 from ...api import soteria_web
 from ....schemas.characters_infos_schema import OneCharacterResponseSchema
 from ....config import config
+from ....helpers.errors_handler import NotFound
 
 logger = logging.getLogger('console')
 
@@ -24,7 +24,7 @@ class OneCharacterView(CharacterAbstractView):
         character_id = self.request.match_info.get('character_id', "None")
         #We raise a NotFound when the number is not a positive number
         if not character_id.isdigit():
-            raise HTTPNotFound(text=f"The character ID #{character_id} is not valid !")
+            raise NotFound(text=f"The character ID #{character_id} is not valid !")
         return int(character_id)
 
     @docs(

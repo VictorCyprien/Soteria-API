@@ -1,10 +1,10 @@
 from typing import Dict, List
-from aiohttp.web_exceptions import HTTPNotFound
 import aiobungie
 import logging
 
 from ...helpers.clean_characters_data import clean_characters_data
 from .. import AbstractView
+from ...helpers.errors_handler import NotFound, ReasonError
 
 logger = logging.getLogger('console')
 
@@ -27,7 +27,7 @@ class CharacterAbstractView(AbstractView):
             list_characters: List = user["profile"]["data"]["characterIds"]
         except KeyError:
             logger.warning("No character found for this profil...")
-            raise HTTPNotFound(text="Character not found")
+            raise NotFound(ReasonError.CHARACTER_NOT_FOUND.value)
 
         return list_characters
     

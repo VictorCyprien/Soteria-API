@@ -1,9 +1,7 @@
-from typing import Dict, List
-from aiohttp.web_exceptions import HTTPNotFound
+from typing import Dict
 import aiobungie
 import logging
 
-from ...helpers.clean_characters_data import clean_characters_data
 from .. import AbstractView
 
 logger = logging.getLogger('console')

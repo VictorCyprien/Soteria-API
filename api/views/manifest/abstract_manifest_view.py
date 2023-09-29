@@ -1,9 +1,9 @@
 from typing import Dict
-from aiohttp.web_exceptions import HTTPNotFound
 import logging
 import json
 
 from .. import AbstractView
+from ...helpers.errors_handler import NotFound, ReasonError
 
 logger = logging.getLogger('console')
 
@@ -29,7 +29,7 @@ class ManifestAbstractView(AbstractView):
             with open(f'./manifest-data/{manifest_name}.json', 'r') as file:
                 manifest_data: Dict = json.loads(file.read())
         except FileNotFoundError:
-            raise HTTPNotFound(text="Manifest not found !")
+            raise NotFound(ReasonError.MANIFEST_NOT_FOUND.value)
         
         return manifest_data
     

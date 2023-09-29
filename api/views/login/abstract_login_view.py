@@ -1,5 +1,3 @@
-from aiohttp import web
-from aiohttp.web_exceptions import HTTPNotFound
 import logging
 
 from .. import AbstractView

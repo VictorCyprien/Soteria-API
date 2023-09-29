@@ -1,9 +1,9 @@
 from typing import Dict
-from aiohttp.web_exceptions import HTTPNotFound
 import aiobungie
 import logging
 
 from .. import CharacterAbstractView
+from ...helpers.errors_handler import NotFound, ReasonError
 
 logger = logging.getLogger('console')
 
@@ -49,7 +49,7 @@ class VendorAbstractView(CharacterAbstractView):
                     [aiobungie.ComponentType.VENDOR_SALES, aiobungie.ComponentType.VENDOR_RECEIPTS]
                 )
             except aiobungie.HTTPError:
-                raise HTTPNotFound(text="Vendor not found")
+                raise NotFound(ReasonError.VENDOR_NOT_FOUND.value)
 
         return vendor
     
