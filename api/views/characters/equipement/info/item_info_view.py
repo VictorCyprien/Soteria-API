@@ -4,20 +4,17 @@ from aiohttp_apispec import (
     docs,
     response_schema
 )
-from aiohttp_cache import cache
 
 import logging
 from ..abstract_equipement_view import EquipementAbstractView
 from ....api import soteria_web
 from .....schemas.items_schemas import EquipItemResponseSchema
 from .....helpers.errors_handler import NotFound, ReasonError
-from .....config import config
 
 logger = logging.getLogger('console')
 
-@soteria_web.view('/characters/{character_id}/equipement/{item_id}/equip')
-@cache(expires=config.CACHE_TIME_EXPIRE)
-class ItemEquipView(EquipementAbstractView):
+@soteria_web.view('/characters/{character_id}/equipement/{item_id}')
+class ItemInfoView(EquipementAbstractView):
     @property
     def character_id(self) -> int:
         character_id = self.request.match_info.get('character_id', "None")
@@ -37,8 +34,8 @@ class ItemEquipView(EquipementAbstractView):
 
 
     @docs(
-        summary="Equip an item",
-        description="Equip an item (weapon or armor) for a character",
+        summary="Check infos of one item",
+        description="Check the infos of one item (weapon or armor) for a character",
         responses={
             201: {"description": "Success reponse"},
             400: {"description": "Invalid request"},
@@ -49,34 +46,21 @@ class ItemEquipView(EquipementAbstractView):
         },
     )
     @response_schema(EquipItemResponseSchema, 201, description="Success reponse")
-    async def post(self) -> web.Response:
+    async def get(self) -> web.Response:
         self.check_auth(self.request)
         
-        character_id = self.character_id
         item_id = self.item_id
-        access_token = str(self.request.headers['X-Access-Token'])
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
 
         membership_id = await self.get_membership_id(bungie_user_id)
         membership_type = await self.get_membership_type(bungie_user_id)
 
-        character_equipment = await self.get_character_equipement(
-            character_id,
+        item = await self.get_item_infos(
+            item_id,
             membership_id,
             membership_type
         )
-
-        item_equipped = await self.equip_item(
-            access_token,
-            item_id,
-            character_equipment,
-            character_id,
-            membership_type
-        )
-
-        if not item_equipped:
-            raise NotFound(ReasonError.ITEM_ALREADY_EQUIPPED.value)
                     
         return json_response(data={
-            "status": "OK",
+            "item": item,
         })

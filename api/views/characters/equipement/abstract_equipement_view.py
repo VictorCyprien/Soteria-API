@@ -34,7 +34,7 @@ class EquipementAbstractView(CharacterAbstractView):
         return item
     
 
-    async def get_item(
+    async def get_item_infos(
         self, 
         item_id: int,
         membership_id: int,
@@ -206,3 +206,24 @@ class EquipementAbstractView(CharacterAbstractView):
             except NotFound as error:
                 if error.error_status == "DestinyItemNotFound":
                     raise NotFound(ReasonError.ITEM_NOT_IN_CHARACTER.value)
+
+
+    async def get_item_infos(
+        self,
+        item_id: int,
+        membership_id: int,
+        membership_type: int
+    ) -> Dict:
+        item = None
+        async with self.bungie.client.acquire() as rest:
+            try:
+                item = await rest.fetch_item(
+                    membership_id,
+                    item_id,
+                    membership_type,
+                    [aiobungie.ComponentType.ALL_ITEMS]
+                )
+            except NotFound as error:
+                if error.error_status == "DestinyItemNotFound":
+                    raise NotFound(ReasonError.ITEM_NOT_IN_CHARACTER.value)
+        return item
