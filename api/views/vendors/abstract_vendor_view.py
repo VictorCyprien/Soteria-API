@@ -7,7 +7,9 @@ from ...helpers.errors_handler import NotFound, ReasonError
 
 logger = logging.getLogger('console')
 
-
+# TODO : Change list of component type
+# LIST VENDOR => VENDORS, CATEGORIES
+# ONE VENDOR => SALES, RECIPES
 class VendorAbstractView(CharacterAbstractView):
     async def get_list_vendors(
         self, 
@@ -23,7 +25,11 @@ class VendorAbstractView(CharacterAbstractView):
                 character_id,
                 membership_id,
                 membership_type,
-                [aiobungie.ComponentType.VENDORS]
+                [
+                    aiobungie.ComponentType.VENDORS,
+                    aiobungie.ComponentType.VENDOR_CATEGORIES,
+                    aiobungie.ComponentType.VENDOR_SALES,
+                ]
             )
 
         return list_vendors

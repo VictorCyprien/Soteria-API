@@ -8,8 +8,8 @@ from aiohttp_apispec import (
 import logging
 from ..abstract_equipement_view import EquipementAbstractView
 from ....api import soteria_web
-from .....schemas.items_schemas import EquipItemResponseSchema
-from .....helpers.errors_handler import NotFound, ReasonError
+from .....schemas.items_schemas import ItemInfoResponseSchema
+from .....helpers.errors_handler import NotFound
 
 logger = logging.getLogger('console')
 
@@ -37,7 +37,7 @@ class ItemInfoView(EquipementAbstractView):
         summary="Check infos of one item",
         description="Check the infos of one item (weapon or armor) for a character",
         responses={
-            201: {"description": "Success reponse"},
+            200: {"description": "Success reponse"},
             400: {"description": "Invalid request"},
             401: {"description": "Unauthorized"},
             404: {"description": "Weapon or armor not found"},
@@ -45,7 +45,7 @@ class ItemInfoView(EquipementAbstractView):
             503: {"description": "Too many requests, wait a bit"},
         },
     )
-    @response_schema(EquipItemResponseSchema, 201, description="Success reponse")
+    @response_schema(ItemInfoResponseSchema, 200, description="Success reponse")
     async def get(self) -> web.Response:
         self.check_auth(self.request)
         
@@ -61,6 +61,4 @@ class ItemInfoView(EquipementAbstractView):
             membership_type
         )
                     
-        return json_response(data={
-            "item": item,
-        })
+        return json_response(data=item)

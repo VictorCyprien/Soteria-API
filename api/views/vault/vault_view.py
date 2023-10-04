@@ -10,6 +10,7 @@ import logging
 from .abstract_vault_view import VaultAbstractView
 from ..api import soteria_web
 from ...config import config
+from ...schemas.vault_schemas import VaultResponseSchema
 
 logger = logging.getLogger('console')
 
@@ -19,7 +20,7 @@ class VaultView(VaultAbstractView):
 
     @docs(
         summary="Vault route",
-        description="Get the of the Vault for the current destiny 2 account",
+        description="Get the content of the Vault for the current destiny 2 account",
         responses={
             200: {"description": "OK"},
             400: {"description": "Invalid request"},
@@ -28,6 +29,7 @@ class VaultView(VaultAbstractView):
             503: {"description": "Too many requests, wait a bit"},
         },
     )
+    @response_schema(VaultResponseSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
         access_token = self.request.headers['X-Access-Token']
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])

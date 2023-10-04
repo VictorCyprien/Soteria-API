@@ -10,6 +10,7 @@ import logging
 from .abstract_vendor_view import VendorAbstractView
 from ..api import soteria_web
 from ...config import config
+from ...schemas.vendors_schemas import VendorsReponseSchema
 
 logger = logging.getLogger('console')
 
@@ -28,7 +29,7 @@ class VendorsView(VendorAbstractView):
             503: {"description": "Too many requests, wait a bit"},
         },
     )
-    #@response_schema(ReponseGetSchema(), 200, description="Success reponse")
+    @response_schema(VendorsReponseSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
         self.check_auth(self.request)
         
