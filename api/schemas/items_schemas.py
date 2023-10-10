@@ -14,6 +14,9 @@ class OneItemEquipment(Schema):
     isWrapper = fields.Boolean()
     versionNumber = fields.Integer()
 
+    class Meta:
+        ordered = True
+
 
 class ItemEquipment(Schema):
     items = fields.Nested(OneItemEquipment, many=True)
@@ -23,10 +26,16 @@ class DataEquipment(Schema):
     data = fields.Nested(ItemEquipment)
     privacy = fields.Integer()
 
+    class Meta:
+        ordered = True
+
 
 class EquipmentResponseSchema(Schema):
     inventory = fields.Nested(DataEquipment)
     loadouts = fields.Dict()
+
+    class Meta:
+        ordered = True
 
 
 class ItemInfoResponseSchema(Schema):
@@ -40,6 +49,9 @@ class ItemInfoResponseSchema(Schema):
     sockets = fields.Dict(metadata={"description": "Sockets of the instance's item"})
     reusablePlugs = fields.Dict()
     plugObjectives = fields.Dict()
+
+    class Meta:
+        ordered = True
 
 
 

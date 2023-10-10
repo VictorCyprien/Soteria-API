@@ -12,6 +12,9 @@ class CharacterDataSchema(Schema):
     emblemPath = fields.String()
     emblemBackgroundPath = fields.String()
 
+    class Meta:
+        ordered = True
+
 
 class CharactersResponseSchema(Schema):
     data = fields.Dict(
@@ -20,6 +23,9 @@ class CharactersResponseSchema(Schema):
         metadata={"description": "The information of one or multiples characters"}
     )
 
+    class Meta:
+        ordered = True
+
 
 class OneCharacterResponseSchema(Schema):
     data = fields.Dict(
@@ -27,3 +33,6 @@ class OneCharacterResponseSchema(Schema):
         values=fields.Nested(CharacterDataSchema),
         metadata={"description": "The information of one character"}
     )
+
+    class Meta:
+        ordered = True

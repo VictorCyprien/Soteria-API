@@ -14,6 +14,9 @@ class VaultItems(Schema):
     isWrapper = fields.String(),
     tooltipNotificationIndexes = fields.List(fields.Integer())
 
+    class Meta:
+        ordered = True
+
 
 class VaultData(Schema):
     data = fields.Nested(VaultItems, many=True)
@@ -22,3 +25,6 @@ class VaultData(Schema):
 class VaultResponseSchema(Schema):
     responseMintedTimestamp = fields.String(metadata={"description": "The time at which the response was received"})
     profileInventory = fields.Nested(VaultData)
+
+    class Meta:
+        ordered = True

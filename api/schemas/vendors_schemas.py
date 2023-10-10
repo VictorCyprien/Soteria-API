@@ -5,6 +5,9 @@ class VendorGroupList(Schema):
     vendorGroupHash = fields.Integer(metadata={"description": "The hash of the vendor group"})
     vendorHashed = fields.List(fields.Integer(), metadata={"description": "The list of vendor's hash"})
 
+    class Meta:
+        ordered = True
+
 
 class VendorDataGroup(Schema):
     groups = fields.Nested(
@@ -17,6 +20,9 @@ class VendorDataGroup(Schema):
 class VendorGroups(Schema):
     data = fields.Nested(VendorDataGroup, metadata={"description": "The data of the vendor group"})
     privacy = fields.Integer(metadata={"description": "Current privacy of this object"})
+
+    class Meta:
+        ordered = True
 
 
 class VendorDataProgression(Schema):
@@ -33,6 +39,10 @@ class VendorDataProgression(Schema):
     nextLevelAt = fields.Integer(metadata={"description": "The next level requirement for this vendor"})
     currentResetCount = fields.Integer(metadata={"description": "The number of rank reset for this vendor"})
 
+    class Meta:
+        ordered = True
+
+
 class VendorData(Schema):
     canPurchase = fields.Boolean(metadata={"description": "Purchase status"})
     progression = fields.Dict(
@@ -46,6 +56,9 @@ class VendorData(Schema):
     vendorHash = fields.Integer(metadata={"description": "The hash of the vendor"})
     nextRefreshDate = fields.String(metadata={"description": "The vendor's refresh date"})
     enabled = fields.Boolean(metadata={"description": "Is this vendor is enabled for this character"})
+
+    class Meta:
+        ordered = True
 
 
 class Vendors(Schema):
@@ -61,6 +74,9 @@ class CategorieDataInfo(Schema):
     displayCategoryIndex = fields.Integer(metadata={"description": "The category index"})
     itemIndexes = fields.List(fields.Integer(), metadata={"description": "The index of item"})
 
+    class Meta:
+        ordered = True
+
 
 class CategorieData(Schema):
     categories = fields.Nested(
@@ -74,15 +90,22 @@ class Categories(Schema):
     data = fields.Dict(
         fields.Integer(), 
         fields.Nested(CategorieData),
-        metadata={"description": "The categorie of a vendor"}
+        metadata={"description": "The categorie of a vendor"},
+        allow_none=True
     )
     privacy = fields.Integer(metadata={"description": "Current privacy"})
+
+    class Meta:
+        ordered = True
 
 
 class CostInfo(Schema):
     itemHash = fields.Integer(metadata={"description": "The hash of the currency"})
     quantity = fields.Integer(metadata={"description": "The quantity required to buy the item"})
     hasConditionalVisibility = fields.Boolean()
+
+    class Meta:
+        ordered = True
 
 
 class ItemInfo(Schema):
@@ -93,6 +116,10 @@ class ItemInfo(Schema):
     itemHash = fields.Integer(metadata={"description": "The hash of the item"})
     quantity = fields.Integer(metadata={"description": "The quantity of the item you want to buy"})
     costs = fields.Nested(CostInfo, many=True, metadata={"description": "Costs of this item"})
+
+    class Meta:
+        ordered = True
+
 
 class SalesItemsData(Schema):
     saleItems = fields.Dict(
@@ -107,20 +134,13 @@ class Sales(Schema):
     data = fields.Dict(
         fields.Integer(), 
         fields.Nested(SalesItemsData),
-        metadata={"description": "The items selled by a vendor"}
+        metadata={"description": "The items selled by a vendor"},
+        allow_none=True
     )
     privacy = fields.Integer(metadata={"description": "Current privacy"})
 
-
-
-class CurrencyLookups(Schema):
-    data = fields.Dict(
-        fields.Integer(), 
-        fields.Nested(VendorData),
-        metadata={"description": "The data of a vendor"}
-    )
-    privacy = fields.Integer(metadata={"description": "Current privacy"})
-
+    class Meta:
+        ordered = True
 
 
 class VendorsReponseSchema(Schema):
@@ -128,3 +148,6 @@ class VendorsReponseSchema(Schema):
     vendors = fields.Nested(Vendors)
     categories = fields.Nested(Categories)
     sales = fields.Nested(Sales)
+
+    class Meta:
+        ordered = True
