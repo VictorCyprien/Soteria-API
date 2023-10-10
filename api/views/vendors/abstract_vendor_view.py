@@ -23,7 +23,10 @@ class VendorAbstractView(CharacterAbstractView):
                 character_id,
                 membership_id,
                 membership_type,
-                [aiobungie.ComponentType.VENDORS]
+                [
+                    aiobungie.ComponentType.VENDORS,
+                    aiobungie.ComponentType.VENDOR_CATEGORIES,
+                ]
             )
 
         return list_vendors
@@ -46,7 +49,10 @@ class VendorAbstractView(CharacterAbstractView):
                     membership_id,
                     membership_type,
                     vendor_id,
-                    [aiobungie.ComponentType.VENDOR_SALES, aiobungie.ComponentType.VENDOR_RECEIPTS]
+                    [
+                        aiobungie.ComponentType.VENDORS,
+                        aiobungie.ComponentType.VENDOR_SALES
+                    ]
                 )
             except aiobungie.HTTPError:
                 raise NotFound(ReasonError.VENDOR_NOT_FOUND.value)

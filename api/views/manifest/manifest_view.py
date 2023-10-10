@@ -5,12 +5,11 @@ from aiohttp_apispec import (
     response_schema,
 )
 
-from marshmallow import Schema, fields
-
 import logging
 from .abstract_manifest_view import ManifestAbstractView
 from ..api import soteria_web
 from ...helpers.convert_sqlite_to_json import sqliteToJson
+from ...schemas.manifest_schemas import ManifestVersionResponseSchema
 
 logger = logging.getLogger('console')
 
@@ -28,7 +27,7 @@ class ManifestView(ManifestAbstractView):
             503: {"description": "Too many requests, wait a bit"},
         },
     )
-    #@response_schema(ReponseGetSchema(), 200, description="Success reponse")
+    @response_schema(ManifestVersionResponseSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
         self.check_auth(self.request)
         

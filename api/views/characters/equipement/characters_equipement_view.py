@@ -9,6 +9,7 @@ from aiohttp_cache import cache
 import logging
 from .abstract_equipement_view import EquipementAbstractView
 from ...api import soteria_web
+from ....schemas.items_schemas import EquipmentResponseSchema
 from ....config import config
 from ....helpers.errors_handler import NotFound
 
@@ -37,7 +38,7 @@ class CharacterEquipementView(EquipementAbstractView):
             503: {"description": "Too many requests, wait a bit"},
         },
     )
-    #@response_schema(ReponseGetSchema(), 200, description="Success reponse")
+    @response_schema(EquipmentResponseSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
         self.check_auth(self.request)
         

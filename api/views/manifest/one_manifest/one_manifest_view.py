@@ -4,7 +4,6 @@ from aiohttp.web_exceptions import HTTPBadRequest
 from aiohttp_apispec import (
     docs,
     querystring_schema,
-    response_schema,
 )
 
 from marshmallow import Schema, fields
@@ -12,7 +11,6 @@ from marshmallow import Schema, fields
 import logging
 from ..abstract_manifest_view import ManifestAbstractView
 from ...api import soteria_web
-from ...root_abstract_view import AbstractView
 from ....helpers.list_to_dict import convert_list_to_dict
 
 logger = logging.getLogger('console')
@@ -46,7 +44,6 @@ class OneManifestView(ManifestAbstractView):
         },
     )
     @querystring_schema(ManifestParamsSchema)
-    #@response_schema(ReponseGetSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
         self.check_auth(self.request)
         
