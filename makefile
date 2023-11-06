@@ -48,14 +48,6 @@ install:
 	@echo "---- Install packages from setup ----"
 	@$(shell echo ${PYTHON_ROCKSDB_FLAGS}) pip install -e ./
 
-tests:
-	pytest --cov=soteria-api --cov-config=.coveragerc --cov-report=html:htmlcov --cov-report xml:cov.xml --cov-report=term \
-		-vv --doctest-modules --ignore-glob=./main.py --log-level=DEBUG --junitxml=report.xml ./ ./tests
-
-
-testsx:
-	pytest -x -vv --doctest-modules --ignore-glob=./soteria-api/main.py --log-level=DEBUG ./soteria-api ./tests
-
 
 build_docker_image:
 	docker build -t soteria-api . 

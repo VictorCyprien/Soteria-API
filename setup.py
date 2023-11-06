@@ -12,7 +12,7 @@ required = [
     "environs"
 ]
 
-VERSION = "2023.09.13"
+VERSION = "2023.11.6"
 
 setup(
       name='soteria-api',
