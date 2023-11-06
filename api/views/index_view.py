@@ -5,12 +5,13 @@ from aiohttp_apispec import (
     docs,
     response_schema
 )
+from aiohttp_cache import cache
 
 from marshmallow import Schema, fields
 
 import logging
 from .api import soteria_web
-from .abstract_view import AbstractView
+from .root_abstract_view import AbstractView
 from ..config import config
 
 logger = logging.getLogger('console')
@@ -19,10 +20,12 @@ logger = logging.getLogger('console')
 class IndexResponseSchema(Schema):
     name = fields.String()
     user = fields.String()
+    # TODO : Rename to bungie_user_id
     user_id = fields.Integer(required=False)
 
 
 @soteria_web.view('/')
+@cache(expires=config.CACHE_TIME_EXPIRE)
 class IndexView(AbstractView):
 
     @docs(

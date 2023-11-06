@@ -7,20 +7,20 @@ from aiohttp_apispec import (
 from aiohttp_cache import cache
 
 import logging
-from .abstract_character_view import CharacterAbstractView
+from .abstract_vendor_view import VendorAbstractView
 from ..api import soteria_web
-from ...schemas.characters_infos_schema import CharactersResponseSchema
 from ...config import config
+from ...schemas.vendors_schemas import VendorsReponseSchema
 
 logger = logging.getLogger('console')
 
-@soteria_web.view('/characters')
+@soteria_web.view('/vendors')
 @cache(expires=config.CACHE_TIME_EXPIRE)
-class CharacterView(CharacterAbstractView):
+class VendorsView(VendorAbstractView):
 
     @docs(
-        summary="Characters route",
-        description="Get the list characters ids of the current destiny 2 account",
+        summary="Vendors route",
+        description="Get the list of vendors available in Destiny 2",
         responses={
             200: {"description": "OK"},
             400: {"description": "Invalid request"},
@@ -29,26 +29,22 @@ class CharacterView(CharacterAbstractView):
             503: {"description": "Too many requests, wait a bit"},
         },
     )
-    @response_schema(CharactersResponseSchema, 200, description="Success reponse")
+    @response_schema(VendorsReponseSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
         self.check_auth(self.request)
         
-        bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
+        access_token = self.request.headers['X-Access-Token']
+        bungie_user_id = self.request.headers['X-Bungie-UserId']
 
         membership_id = await self.get_membership_id(bungie_user_id)
         membership_type = await self.get_membership_type(bungie_user_id)
-        
-        # Retrive list of characters
-        characters_ids = await self.get_characters_ids(
-            membership_id,
-            membership_type
-        )
-        
-        # Get every character infos
-        characters = await self.get_characters_infos(
-            characters_ids,
+        character_id = await self.get_characters_ids(membership_id, membership_type)
+
+        list_vendors = await self.get_list_vendors(
+            access_token,
+            character_id[0],
             membership_id,
             membership_type
         )
 
-        return json_response(data=characters)
+        return json_response(data=list_vendors)

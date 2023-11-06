@@ -1,4 +1,5 @@
 from aiohttp import web
+from aiohttp.web import json_response
 from aiohttp_apispec import (
     docs,
     response_schema
@@ -7,16 +8,16 @@ from aiohttp_apispec import (
 from marshmallow import Schema, fields
 
 import logging
+from .abstract_login_view import LoginAbstractView
 from ..api import soteria_web
-from ..abstract_view import AbstractView
 
 logger = logging.getLogger('console')
 
-class ReponseGetSchema(Schema):
-    status = fields.String()
+class ReponseLoginSchema(Schema):
+    url = fields.String()
 
 @soteria_web.view('/login')
-class LoginView(AbstractView):
+class LoginView(LoginAbstractView):
 
     @docs(
         summary="Login route",
@@ -27,10 +28,10 @@ class LoginView(AbstractView):
             500: {"description": "Server error"},
         },
     )
-    @response_schema(ReponseGetSchema(), 200, description="Success reponse")
+    @response_schema(ReponseLoginSchema(), 200, description="Generate a new OAuth link")
     async def get(self) -> web.Response:
-        async with self.bungie.client.acquire() as rest:
-            oauth_url = rest.build_oauth2_url()
-
-            assert oauth_url is not None, "Make sure client ID and secret are set AND correct !"
-            raise web.HTTPFound(location=oauth_url.url)
+        url = await self.generate_oauth_url()
+        res = {
+            "url": url.url
+        }
+        return json_response(data=res)

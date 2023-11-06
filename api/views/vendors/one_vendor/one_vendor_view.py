@@ -7,29 +7,28 @@ from aiohttp_apispec import (
 from aiohttp_cache import cache
 
 import logging
-from .abstract_equipement_view import EquipementAbstractView
+from ..abstract_vendor_view import VendorAbstractView
 from ...api import soteria_web
-from ....schemas.items_schemas import EquipmentResponseSchema
 from ....config import config
 from ....helpers.errors_handler import NotFound
 
 logger = logging.getLogger('console')
 
-@soteria_web.view('/characters/{character_id}/equipement')
+@soteria_web.view('/vendors/{vendor_id}')
 @cache(expires=config.CACHE_TIME_EXPIRE)
-class CharacterEquipementView(EquipementAbstractView):
-    @property
-    def character_id(self) -> int:
-        character_id = self.request.match_info.get('character_id', "None")
-        #We raise a NotFound when the number is not a positive number
-        if not character_id.isdigit():
-            raise NotFound(f"The character ID #{character_id} is not valid !")
-        return int(character_id)
+class OneVendorView(VendorAbstractView):
 
+    @property
+    def vendor_id(self) -> int:
+        vendor_id = self.request.match_info.get('vendor_id', "None")
+        #We raise a NotFound when the number is not a positive number
+        if not vendor_id.isdigit():
+            raise NotFound(text=f"The vendor ID #{vendor_id} is not valid !")
+        return int(vendor_id)
 
     @docs(
-        summary="Characters equipement route",
-        description="Get the equipement of one character",
+        summary="One Vendor route",
+        description="Get the informations of one vendor",
         responses={
             200: {"description": "OK"},
             400: {"description": "Invalid request"},
@@ -38,21 +37,24 @@ class CharacterEquipementView(EquipementAbstractView):
             503: {"description": "Too many requests, wait a bit"},
         },
     )
-    @response_schema(EquipmentResponseSchema(), 200, description="Success reponse")
+    #@response_schema(ReponseGetSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
         self.check_auth(self.request)
         
-        character_id = self.character_id
-        bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
+        access_token = self.request.headers['X-Access-Token']
+        bungie_user_id = self.request.headers['X-Bungie-UserId']
+        vendor_id = self.vendor_id
 
         membership_id = await self.get_membership_id(bungie_user_id)
         membership_type = await self.get_membership_type(bungie_user_id)
-        
-        # Get current character's equipment
-        character = await self.get_character_equipement(
-            character_id,
+        character_id = await self.get_characters_ids(membership_id, membership_type)
+
+        vendor = await self.get_one_vendor(
+            access_token,
+            character_id[0],
             membership_id,
-            membership_type
+            membership_type,
+            vendor_id
         )
 
-        return json_response(data=character)
+        return json_response(data=vendor)

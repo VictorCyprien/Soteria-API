@@ -1,14 +1,15 @@
 from typing import Dict
 from aiohttp import web
 from aiohttp.web import json_response
-from aiohttp_apispec import docs, querystring_schema
+from aiohttp_apispec import docs, querystring_schema, response_schema
 
 import logging
 
 from marshmallow import Schema, fields
 
+from .abstract_redirect_view import RedirectAbstractView
 from ..api import soteria_web
-from ..abstract_view import AbstractView
+from ...helpers.errors_handler import NotFound, ReasonError
 
 logger = logging.getLogger('console')
 
@@ -18,8 +19,13 @@ class RedirectParamsSchema(Schema):
     state = fields.String()
 
 
+class RedirectResponseSchema(Schema):
+    access_token = fields.String()
+    user_id = fields.Integer()
+
+
 @soteria_web.view('/redirect')
-class RedirectView(AbstractView):
+class RedirectView(RedirectAbstractView):
 
     @docs(
         summary="This route is used by BungieAPI to retrive user's information",
@@ -31,20 +37,18 @@ class RedirectView(AbstractView):
         },
     )
     @querystring_schema(RedirectParamsSchema)
+    @response_schema(RedirectResponseSchema, 200, description="Return a new access token and current user_id")
     async def get(self) -> web.Response:
         params: Dict = self.request['querystring']
         code = params.get("code")
 
         if code is None:
-            raise web.HTTPNotFound(text="Code not found, aborting...")
+            raise NotFound(ReasonError.REDIRECT_ERROR.value)
         
-        async with self.bungie.client.acquire() as rest:
-            tokens = await rest.fetch_oauth2_tokens(code)
-            self.bungie.client.metadata["token"] = tokens.access_token
-
-
-        # TODO : Return the token to client
+        tokens = await self.get_tokens(code)
+        user_id = await self.bungie.get_user_infos(tokens.access_token)
 
         return json_response({
-            "access_token": tokens.access_token
+            "access_token": tokens.access_token,
+            "user_id": user_id["bungieNetUser"]["membershipId"]
         })

@@ -7,20 +7,20 @@ from aiohttp_apispec import (
 from aiohttp_cache import cache
 
 import logging
-from .abstract_character_view import CharacterAbstractView
+from .abstract_vault_view import VaultAbstractView
 from ..api import soteria_web
-from ...schemas.characters_infos_schema import CharactersResponseSchema
 from ...config import config
+from ...schemas.vault_schemas import VaultResponseSchema
 
 logger = logging.getLogger('console')
 
-@soteria_web.view('/characters')
+@soteria_web.view('/vault')
 @cache(expires=config.CACHE_TIME_EXPIRE)
-class CharacterView(CharacterAbstractView):
+class VaultView(VaultAbstractView):
 
     @docs(
-        summary="Characters route",
-        description="Get the list characters ids of the current destiny 2 account",
+        summary="Vault route",
+        description="Get the content of the Vault for the current destiny 2 account",
         responses={
             200: {"description": "OK"},
             400: {"description": "Invalid request"},
@@ -29,26 +29,18 @@ class CharacterView(CharacterAbstractView):
             503: {"description": "Too many requests, wait a bit"},
         },
     )
-    @response_schema(CharactersResponseSchema, 200, description="Success reponse")
+    @response_schema(VaultResponseSchema(), 200, description="Success reponse")
     async def get(self) -> web.Response:
-        self.check_auth(self.request)
-        
+        access_token = self.request.headers['X-Access-Token']
         bungie_user_id = int(self.request.headers['X-Bungie-Userid'])
 
         membership_id = await self.get_membership_id(bungie_user_id)
         membership_type = await self.get_membership_type(bungie_user_id)
-        
-        # Retrive list of characters
-        characters_ids = await self.get_characters_ids(
-            membership_id,
-            membership_type
-        )
-        
-        # Get every character infos
-        characters = await self.get_characters_infos(
-            characters_ids,
-            membership_id,
+
+        vault = await self.get_vault_content(
+            access_token, 
+            membership_id, 
             membership_type
         )
 
-        return json_response(data=characters)
+        return json_response(data=vault)
