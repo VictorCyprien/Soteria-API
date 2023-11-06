@@ -52,7 +52,7 @@ You need to setup some environnements variables in order to make the API to work
 - First, create a file `.env` at the root of the project<br>
 - Then, set those variables :<br>
 
-    - _BUNGIE_API_KEY_ : The API-Key used to injteract with Bungie's API
+    - _BUNGIE_API_KEY_ : The API-Key used to interact with Bungie's API
     - _BUNGIE_API_CLIENT_ID_ : The ID of your client
     - _BUNGIE_API_CLIENT_SECRET_ : The password of your client
 
